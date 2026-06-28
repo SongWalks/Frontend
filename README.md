@@ -11,7 +11,7 @@
   1. `ESLint`
   2. `Prettier - Code formatter`
 
-*(설치 후 VS Code 설정에서 `Editor: Format On Save`를 체크하고, 기본 포맷터를 Prettier로 설정해 주세요.)*
+*(설치 후 VS Code 설정(`Ctrl` + `,`)에서 `Editor: Format On Save`를 체크하고, `default formatter`를 `Prettier - Code formatter`로 설정해 주세요.)*
 
 ---
 
@@ -36,7 +36,7 @@ npm install
 ```bash
 npm run dev
 ```
-명령어 실행 후 터미널에 나타나는 `http://localhost:5173/` 링크를 `Ctrl +` 클릭하여 브라우저에서 화면이 정상적으로 뜨는지 확인한다.
+명령어 실행 후 터미널에 나타나는 http://localhost:5173/ 링크를 `Ctrl` + `클릭`하여 브라우저에서 화면이 정상적으로 뜨는지 확인한다.
 
 ---
 
