@@ -1,23 +1,26 @@
-name: Auto Assign Issue Author
+name: Auto Assign to Creator
 
 on:
   issues:
     types: [opened]
+  pull_request:
+    types: [opened]
 
 permissions:
   issues: write
+  pull-requests: write
 
 jobs:
-  auto-assign:
+  assign-author:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/github-script@v7
+      - name: Assign author
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.addAssignees({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.payload.issue.number,
-              assignees: [context.payload.issue.user.login]
+              issue_number: context.issue.number,
+              assignees: [context.actor]
             })
