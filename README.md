@@ -43,6 +43,8 @@ npm run dev
 ## 🌿 협업 규칙 및 브랜치 전략
 
 - 메인 브랜치: `main`
-- 작업 브랜치: `feature/#이슈번호-개발할기능` 형식의 브랜치명으로 생성 (ex: feature/#1-mypage)
+- 작업 브랜치: `feature/#이슈번호-개발할기능` 형식의 브랜치명으로 생성
+
+  (ex: feature/#1-mypage, fix/#10-UIFix...)
 - 커밋 규칙: 깃허브에 Push한 뒤, `main` 브랜치로 PR 생성
 - 보호 규칙: `main`에 직접 Merge 불가
