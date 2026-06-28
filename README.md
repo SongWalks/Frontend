@@ -30,19 +30,19 @@ cd Frontend
 ```bash
 npm install
 ```
-package.json에 명시된 모든 라이브러리가 설치되며, 코드 컨벤션을 강제하는 Husky (git pre-commit hook)도 자동으로 연결된다.
+`package.json`에 명시된 모든 라이브러리가 설치되며, 코드 컨벤션을 강제하는 Husky (git pre-commit hook)도 자동으로 연결된다.
 
 **3. 로컬 서버 실행**
 ```bash
 npm run dev
 ```
-명령어 실행 후 터미널에 나타나는 http://localhost:5173/ 링크를 Ctrl + 클릭하여 브라우저에서 화면이 정상적으로 뜨는지 확인한다.
+명령어 실행 후 터미널에 나타나는 `http://localhost:5173/` 링크를 `Ctrl +` 클릭하여 브라우저에서 화면이 정상적으로 뜨는지 확인한다.
 
 ---
 
 ## 🌿 협업 규칙 및 브랜치 전략
 
-- 메인 브랜치: main
-- 작업 브랜치: feature/#이슈번호-개발할기능 (ex: feature/#1-mypage)
-- 커밋 규칙: 깃허브에 Push한 뒤, main 브랜치로 PR 생성
-- 보호 규칙: main에 직접 Merge 불가
+- 메인 브랜치: `main`
+- 작업 브랜치: `feature/#이슈번호-개발할기능` 형식의 브랜치명으로 생성 (ex: feature/#1-mypage)
+- 커밋 규칙: 깃허브에 Push한 뒤, `main` 브랜치로 PR 생성
+- 보호 규칙: `main`에 직접 Merge 불가
