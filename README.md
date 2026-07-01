@@ -7,6 +7,7 @@
 ## ⚙️ 시작하기 전에 (Prerequisites)
 
 * **Node.js**가 설치되어 있어야 한다.
+  - 터미널에서 `node -v`로 설치 유무 확인 가능
 * 일관된 코드 스타일을 위해 아래 VS Code 확장 프로그램(Extensions)을 반드시 설치해 주세요.
   1. `ESLint`
   2. `Prettier - Code formatter`
