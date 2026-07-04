@@ -1,12 +1,15 @@
-// 모바일 화면 비율(가운데 정렬, 최대 너비)을 잡아주는 가장 바깥 틀
+// src/components/layout/RootLayout.tsx
 import { Outlet } from 'react-router-dom';
 
-function RootLayout() {
+export default function RootLayout() {
+  // 1. PC/태블릿 접속 시 남는 배경 (어두운 회색)
   return (
-    <div className="max-w-md mx-auto">
-      <Outlet />
+    <div className="min-h-screen bg-gray-200 flex justify-center font-sans text-gray-900">
+      {/* 2. 모바일 앱 규격(375px) 컨테이너 */}
+      <div className="w-full max-w-[402px] min-h-screen bg-gray-50 shadow-xl relative flex flex-col overflow-hidden">
+        {/* 자식 라우트(DefaultLayout 또는 FullScreenLayout)가 렌더링될 자리 */}
+        <Outlet />
+      </div>
     </div>
   );
 }
-
-export default RootLayout;
