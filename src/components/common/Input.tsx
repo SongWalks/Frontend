@@ -1,5 +1,6 @@
 // src/components/common/Input.tsx
 import React, { forwardRef } from 'react';
+import cautionIcon from '@/assets/caution.svg';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   leftNode?: React.ReactNode; // 왼쪽 아이콘 (이메일, 자물쇠 등)
@@ -66,7 +67,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {/* 4. 에러 메시지 영역 */}
         {isError && errorMessage && (
           <span className="text-xs text-point-red flex items-center gap-1 mt-1 pl-1">
-            {/* 느낌표 아이콘 등을 넣어도 좋습니다 */}! {errorMessage}
+            <img src={cautionIcon} className="size-4" />
+            {errorMessage}
           </span>
         )}
       </div>

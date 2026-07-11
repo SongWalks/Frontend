@@ -17,6 +17,8 @@ import { TestCard } from '../pages/TestCard';
 import { TestExtra } from '../pages/TestExtra';
 import { TestAvatar } from '../pages/TestAvatar';
 import { TestLoading } from '../pages/TestLoading';
+import LoginPage from '../pages/login/login';
+import SignupPage from '../pages/signup';
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +55,8 @@ export const router = createBrowserRouter([
         children: [
           // :id 나 :roomId 는 동적 라우팅 기법입니다. (ex. /board/123)
           // 예시: { path: 'board/:id', element: <DetailPage /> },    // 상세 게시글
+          { path: '/login', element: <LoginPage /> },
+          { path: '/signup', element: <SignupPage /> },
         ],
       },
     ],
