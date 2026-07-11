@@ -17,12 +17,12 @@ export const IconButton = ({
       onClick={onClick}
       className={`
         p-2 rounded-full transition-colors duration-200 
-        hover:bg-gray-100 active:bg-gray-200
+        hover:bg-transparent active:bg-black/10
         flex items-center justify-center
         ${className}
       `}
     >
-      {/* 💡 아이콘 크기는 무조건 24px(text-2xl) 또는 20px(text-xl)로 고정 */}
+      {/* 아이콘 크기는 무조건 24px(text-2xl) 또는 20px(text-xl)로 고정 */}
       <Icon icon={icon} className="text-[22px] text-gray-800" />
     </button>
   );
