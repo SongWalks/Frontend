@@ -15,10 +15,10 @@ export default function HomePage() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // 센서가 화면 밖으로 나가면(스크롤을 내리면) 블러 효과 ON!
+        // 센서가 화면 밖으로 나가면(스크롤을 내리면) 블러 효과 ON
         setIsScrolled(!entry.isIntersecting);
       },
-      { threshold: 0 }, // 0으로 설정하면 단 1px만 스크롤돼도 바로 반응합니다.
+      { threshold: 0 }, // 0으로 설정하면 단 1px만 스크롤돼도 반응함
     );
 
     if (sensorRef.current) observer.observe(sensorRef.current);
@@ -72,13 +72,13 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-full pb-10 flex flex-col bg-white">
-      {/* 🚨 핵심: 화면 맨 위(top-0)에 투명한 1px짜리 센서를 붙여둡니다! */}
+      {/* 화면 맨 위(top-0)에 투명한 1px짜리 센서를 붙여둠 */}
       <div
         ref={sensorRef}
         className="absolute top-0 left-0 w-full h-[1px] bg-transparent pointer-events-none z-50"
       />
 
-      {/* 배경 레이어 (fixed로 잘 고정해두신 부분!) */}
+      {/* 배경 레이어 */}
       <div className="fixed top-0 left-0 w-full h-screen pointer-events-none z-0 overflow-hidden">
         <div
           className="absolute inset-0"
@@ -104,7 +104,6 @@ export default function HomePage() {
 
       {/* 본문 콘텐츠 영역 */}
       <div className="relative z-10 flex flex-col bg-transparent w-full">
-        {/* 🚨 여기서 Header에 isScrolled 값을 넘겨줍니다! */}
         <div className="fixed top-0 left-0 w-full z-50">
           <HomeHeader isScrolled={isScrolled} />
         </div>
