@@ -5,7 +5,10 @@ import RootLayout from '@/components/layout/RootLayout';
 import DefaultLayout from '@/components/layout/DefaultLayout';
 import FullScreenLayout from '@/components/layout/FullScreenLayout';
 
-// --- 2. 페이지 불러오기 (임시 예시) ---
+// --- 2. 페이지 불러오기 ---
+// 💡 마이페이지 컴포넌트를 정상적으로 임포트해 줍니다! (폴더 경로명이 소문자/대문자일 수 있으니 확인해 주세요)
+import Mypage from '../pages/Mypage/Mypage';
+
 import { TestButton } from '../pages/TestButton';
 import { TestHeader } from '../pages/TestHeader';
 import { TestInput } from '../pages/TestInput';
@@ -26,7 +29,9 @@ export const router = createBrowserRouter([
         // ==========================================
         element: <DefaultLayout />,
         children: [
-          // 예시: { path: 'board', element: <BoardPage /> },    // /board (교환게시판)
+          // 💡 마이페이지 등록: /my 주소로 들어오면 하단바와 함께 MyPage를 띄웁니다!
+          { path: 'my', element: <Mypage /> },
+
           { path: '/test-input', element: <TestInput /> },
           { path: '/test-modal', element: <TestModal /> },
           { path: '/test-button', element: <TestButton /> },
@@ -44,8 +49,7 @@ export const router = createBrowserRouter([
         // ==========================================
         element: <FullScreenLayout />,
         children: [
-          // :id 나 :roomId 는 동적 라우팅 기법입니다. (ex. /board/123)
-          // 예시: { path: 'board/:id', element: <DetailPage /> },    // 상세 게시글
+          // 상세페이지 등은 여기에 등록됩니다.
         ],
       },
     ],
