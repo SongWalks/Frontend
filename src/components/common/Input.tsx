@@ -1,6 +1,6 @@
 // src/components/common/Input.tsx
 import React, { forwardRef } from 'react';
-import cautionIcon from '@/assets/caution.svg';
+import cautionIcon from '@/assets/icons/caution.svg';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   leftNode?: React.ReactNode; // 왼쪽 아이콘 (이메일, 자물쇠 등)
