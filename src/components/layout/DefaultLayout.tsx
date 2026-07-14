@@ -3,8 +3,7 @@ import BottomNav from './BottomNav';
 
 export default function DefaultLayout() {
   return (
-    <div className="flex flex-col h-screen w-full relative">
-      {/* 💡 핵심: id="main-scroll-container" 를 추가합니다! */}
+    <div className="flex flex-col h-full w-full relative">
       <main
         id="main-scroll-container"
         className="flex-1 overflow-y-auto w-full"

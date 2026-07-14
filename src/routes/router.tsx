@@ -28,7 +28,6 @@ export const router = createBrowserRouter([
         // ==========================================
         // 💡 1번 그룹: 하단 네비게이션(BottomNav)이 있는 화면들
         // ==========================================
-        path: '/',
         element: <DefaultLayout />,
         children: [
           // 예시: { path: 'board', element: <BoardPage /> },    // /board (교환게시판)
@@ -49,7 +48,6 @@ export const router = createBrowserRouter([
         // ==========================================
         // 💡 2번 그룹: 하단 바 없이 전체 화면을 쓰는 화면들
         // ==========================================
-        path: '/',
         element: <FullScreenLayout />,
         children: [
           { path: '/report', element: <ReportPage /> },
