@@ -71,14 +71,14 @@ export default function HomePage() {
         ];
 
   return (
-    <div className="relative mx-auto w-full max-w-[430px] min-h-screen pb-10 flex flex-col bg-white overflow-hidden shadow-2xl">
+    <div className="relative mx-auto w-full max-w-[430px] min-h-screen pb-10 flex flex-col bg-white overflow-x-hidden shadow-2xl">
       {/* 화면 맨 위(top-0)에 투명한 1px짜리 센서를 붙여둠 */}
       <div
         ref={sensorRef}
         className="absolute top-0 left-0 w-full h-[1px] bg-transparent pointer-events-none z-50"
       />
 
-      {/* 배경 레이어 (absolute로 부모 영역 안에 가둠) */}
+      {/* 배경 레이어 */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
         <div
           className="absolute inset-0"
