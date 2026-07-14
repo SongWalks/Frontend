@@ -9,37 +9,52 @@
 /* ── Pretendard (기본 폰트) ── */
 @font-face {
   font-family: 'Pretendard';
-  src: url('./assets/fonts/Pretendard-Light.woff2') format('woff2');
   font-weight: 300;
-  font-style: normal;
+  font-display: swap;
+  src:
+    local('Pretendard Light'),
+    url(./assets/fonts/Pretendard-Light.subset.woff2) format('woff2'),
+    url(./assets/fonts/Pretendard-Light.subset.woff) format('woff');
 }
 
 @font-face {
   font-family: 'Pretendard';
-  src: url('./assets/fonts/Pretendard-Regular.woff2') format('woff2');
   font-weight: 400;
-  font-style: normal;
+  font-display: swap;
+  src:
+    local('Pretendard Regular'),
+    url(./assets/fonts/Pretendard-Regular.subset.woff2) format('woff2'),
+    url(./assets/fonts/Pretendard-Regular.subset.woff) format('woff');
 }
 
 @font-face {
   font-family: 'Pretendard';
-  src: url('./assets/fonts/Pretendard-Medium.woff2') format('woff2');
   font-weight: 500;
-  font-style: normal;
+  font-display: swap;
+  src:
+    local('Pretendard Medium'),
+    url(./assets/fonts/Pretendard-Medium.subset.woff2) format('woff2'),
+    url(./assets/fonts/Pretendard-Medium.subset.woff) format('woff');
 }
 
 @font-face {
   font-family: 'Pretendard';
-  src: url('./assets/fonts/Pretendard-SemiBold.woff2') format('woff2');
   font-weight: 600;
-  font-style: normal;
+  font-display: swap;
+  src:
+    local('Pretendard SemiBold'),
+    url(./assets/fonts/Pretendard-SemiBold.subset.woff2) format('woff2'),
+    url(./assets/fonts/Pretendard-SemiBold.subset.woff) format('woff');
 }
 
 @font-face {
   font-family: 'Pretendard';
-  src: url('./assets/fonts/Pretendard-Bold.woff2') format('woff2');
   font-weight: 700;
-  font-style: normal;
+  font-display: swap;
+  src:
+    local('Pretendard Bold'),
+    url(./assets/fonts/Pretendard-Bold.subset.woff2) format('woff2'),
+    url(./assets/fonts/Pretendard-Bold.subset.woff) format('woff');
 }
 
 /* ── Paperlogy (포인트 제목 폰트) ── */
