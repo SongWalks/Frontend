@@ -16,6 +16,8 @@ import { TestExtra } from '../pages/TestExtra';
 import { TestAvatar } from '../pages/TestAvatar';
 import { TestLoading } from '../pages/TestLoading';
 
+import { LoungePage } from '@/pages/lounge/LoungePage';
+
 export const router = createBrowserRouter([
   {
     element: <RootLayout />,
@@ -36,6 +38,8 @@ export const router = createBrowserRouter([
           { path: '/test-extra', element: <TestExtra /> },
           { path: '/test-avatar', element: <TestAvatar /> },
           { path: '/test-loading', element: <TestLoading /> },
+
+          { path: '/lounge', element: <LoungePage /> },
         ],
       },
       {
