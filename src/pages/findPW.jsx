@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
-import backIcon from '@/assets/icons/back.svg';
+import { IconButton } from '@/components/common/IconButton';
 import eyeIcon from '@/assets/icons/eye.svg';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
@@ -223,20 +223,19 @@ export default function FindPasswordPage() {
         }}
       >
         {/* 뒤로가기 버튼 — 확대 (44px 탭 영역, 아이콘 28x16) */}
-        <button
-          type="button"
-          onClick={handleBack}
+        <div
           style={{
             position: 'absolute',
             top: 25,
-            left: 12,
-            width: 44,
-            height: 44,
+            left: 10,
+            opacity: 0.4, // 투명도 조절
+            transform: 'scale(1.6)', // 크기 조절
+            transformOrigin: 'top left',
           }}
-          className="flex items-center justify-center z-10"
+          className="z-10"
         >
-          <img src={backIcon} alt="" className="w-15 h-15" />
-        </button>
+          <IconButton icon="mdi:chevron-left" onClick={handleBack} />
+        </div>
 
         {step === 'email' ? (
           <>
