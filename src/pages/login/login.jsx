@@ -269,7 +269,7 @@ export default function LoginPage() {
             <button
               type="button"
               className={styles.linkButton}
-              onClick={() => console.log('[Nav] 비밀번호 찾기 페이지로 이동')}
+              onClick={() => navigate('/findPW')}
             >
               <img className={styles.lockIcon} src={lockIcon} alt="" />
               비밀번호 찾기
