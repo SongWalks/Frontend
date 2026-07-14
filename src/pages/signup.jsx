@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
-import backIcon from '@/assets/back.svg';
-import eyeIcon from '@/assets/eye.svg';
+import backIcon from '@/assets/icons/back.svg';
+import eyeIcon from '@/assets/icons/eye.svg';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
 const API = {
