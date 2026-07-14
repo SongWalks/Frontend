@@ -41,7 +41,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className={`
               w-full text-sm text-gray-900 transition-colors duration-200
               placeholder:text-gray-400 focus:outline-none
-              ${variant === 'default' ? 'py-3.5 rounded-xl' : 'py-3 rounded-full'}
+              ${variant === 'default' ? 'py-3 rounded-md' : 'py-2.5 rounded-full'}
               ${leftNode ? 'pl-11' : 'pl-4'} 
               ${rightNode ? 'pr-11' : 'pr-4'}
               ${
