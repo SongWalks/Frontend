@@ -19,6 +19,7 @@ import { TestAvatar } from '../pages/TestAvatar';
 import { TestLoading } from '../pages/TestLoading';
 import LoginPage from '../pages/login/login';
 import SignupPage from '../pages/signup';
+import FindPWPage from '../pages/findPW';
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,7 @@ export const router = createBrowserRouter([
           // 예시: { path: 'board/:id', element: <DetailPage /> },    // 상세 게시글
           { path: '/login', element: <LoginPage /> },
           { path: '/signup', element: <SignupPage /> },
+          { path: '/findPW', element: <FindPWPage /> },
         ],
       },
     ],
