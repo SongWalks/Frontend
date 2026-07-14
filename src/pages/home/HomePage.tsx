@@ -6,7 +6,7 @@ import { RecommendMatchItem } from '@/pages/home/components/RecommendMatchItem';
 
 import sooWatermark from '@/assets/images/soo-watermark.png';
 
-const HOME_STATE: 'empty' | 'active' | 'alert' = 'active';
+const HOME_STATE: 'empty' | 'active' | 'alert' = 'empty'; // 현재 홈 화면 상태를 나타내는 상수 (empty, active, alert)
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -71,15 +71,15 @@ export default function HomePage() {
         ];
 
   return (
-    <div className="relative min-h-full pb-10 flex flex-col bg-white">
+    <div className="relative mx-auto w-full max-w-[430px] min-h-screen pb-10 flex flex-col bg-white overflow-hidden shadow-2xl">
       {/* 화면 맨 위(top-0)에 투명한 1px짜리 센서를 붙여둠 */}
       <div
         ref={sensorRef}
         className="absolute top-0 left-0 w-full h-[1px] bg-transparent pointer-events-none z-50"
       />
 
-      {/* 배경 레이어 */}
-      <div className="fixed top-0 left-0 w-full h-screen pointer-events-none z-0 overflow-hidden">
+      {/* 배경 레이어 (absolute로 부모 영역 안에 가둠) */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
         <div
           className="absolute inset-0"
           style={{
@@ -88,13 +88,20 @@ export default function HomePage() {
           }}
         />
         <div
-          className="absolute w-96 h-96 left-[138.65px] top-[202.75px] origin-top-left -rotate-[61.65deg] rounded-full blur-[11px] opacity-70"
-          style={{ background: 'linear-gradient(152deg, #E9F2F5, #CAE4FD)' }}
+          className="absolute -top-[100px] -right-[50px] w-[600px] h-[600px] rounded-full blur-[100px] opacity-[0.06]"
+          style={{
+            background:
+              'radial-gradient(circle, #FFECCC 0%, #FFCDB5 50%, transparent 80%)',
+          }}
+        />
+        <div
+          className="absolute w-96 h-96 left-[130px] top-[202.75px] origin-top-left -rotate-[62deg] rounded-full blur-[20px] opacity-[0.3]"
+          style={{ background: 'linear-gradient(152deg, #E9F2F5, #43A3FF)' }}
         />
       </div>
 
-      {/* 워터마크 (고정) */}
-      <div className="fixed top-[65px] left-[90px] w-96 h-48 pointer-events-none z-0 select-none">
+      {/* 워터마크 (absolute로 부모 영역 안에 가둠) */}
+      <div className="absolute top-[100px] left-[60px] w-96 h-48 pointer-events-none z-0 select-none">
         <img
           src={sooWatermark}
           alt="SOO 워터마크"
@@ -104,7 +111,8 @@ export default function HomePage() {
 
       {/* 본문 콘텐츠 영역 */}
       <div className="relative z-10 flex flex-col bg-transparent w-full">
-        <div className="fixed top-0 left-0 w-full z-50">
+        {/* 헤더 (모바일 너비인 430px 안에서만 고정) */}
+        <div className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50">
           <HomeHeader isScrolled={isScrolled} />
         </div>
 

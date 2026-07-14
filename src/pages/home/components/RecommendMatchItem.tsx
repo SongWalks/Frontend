@@ -20,17 +20,17 @@ export const RecommendMatchItem = ({
       <div className="flex flex-col gap-1 overflow-hidden pr-4">
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-[#5A9ECC] shrink-0" />
-          <h3 className="font-bold text-gray-900 text-[14px] truncate">
+          <h3 className="font-bold text-gray-900 text-medium-14 truncate">
             {subject}
           </h3>
         </div>
-        <p className="text-gray-400 text-xs ml-3.5 truncate">
+        <p className="text-gray-400 text-light-13 ml-3.5 truncate">
           ↔ {targetSubject}
         </p>
       </div>
 
       <div className="flex items-center gap-1 text-gray-700 shrink-0">
-        <Icon icon="ph:clock" className="text-base" />
+        <Icon icon="ph:clock" className="text-base translate-y-[1px]" />
         <span className="font-bold text-[14px]">{time}</span>
       </div>
     </div>

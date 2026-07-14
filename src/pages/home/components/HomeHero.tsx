@@ -10,8 +10,13 @@ export const HomeHero = ({ state, userName = '송이' }: HomeHeroProps) => {
     <section className="relative w-full pt-4 pb-6 flex flex-col">
       {/* 마스코트 — 우측 상단 고정, 텍스트 위에 겹치게 */}
       <div
-        className="absolute right-[-8px] top-[-8px]
-        w-[160px] h-[170px] pointer-events-none z-10"
+        className={`absolute right-[-8px] w-[160px] h-[170px] pointer-events-none z-10 transition-all ${
+          state === 'empty'
+            ? 'top-[60px]'
+            : state === 'alert'
+              ? 'top-[40px]'
+              : 'top-[50px]'
+        }`}
       >
         <img
           src="/src/assets/images/noonsong.png"
@@ -23,13 +28,17 @@ export const HomeHero = ({ state, userName = '송이' }: HomeHeroProps) => {
       {/* 텍스트 영역 — 마스코트랑 안 겹치게 우측 패딩 */}
       <div
         className={`flex flex-col justify-center min-h-[140px]
-        z-10 pr-[150px] ${state === 'empty' ? 'pt-16' : 'pt-0'}`}
+        z-10 pr-[150px] ${
+          state === 'empty' ? 'pt-28' : state === 'alert' ? 'pt-14' : 'pt-8'
+        }`}
       >
         {/* empty */}
         {state === 'empty' && (
           <>
-            <h1 className="text-point-1 text-brand-navy">수강구조대</h1>
-            <p className="text-medium-15 text-gray-700 mt-4">
+            <h1 className="text-point-2 !text-[32px] text-brand-navy">
+              수강구조대
+            </h1>
+            <p className="text-medium-15 text-gray-700 mt-2">
               눈송이들의 안전한
               <br />
               수강 교환을 도와드립니다
@@ -42,12 +51,12 @@ export const HomeHero = ({ state, userName = '송이' }: HomeHeroProps) => {
           <>
             <span
               className="inline-block px-3 py-0.5 border border-brand-lightBlue
-              text-brand-lightBlue rounded-full text-[11px] font-bold w-fit mb-2
+              text-brand-lightBlue rounded-full text-[11px] font-bold w-fit mb-6
               bg-white/60"
             >
               D-2
             </span>
-            <h1 className="text-point-1 !leading-[32px] font-bold">
+            <h1 className="text-point-2 !text-[32px] !leading-[31px] font-bold">
               <span className="text-brand-navy">안녕하세요,</span>
               <br />
               <span className="text-brand-blue">{userName}님!</span>
@@ -65,7 +74,7 @@ export const HomeHero = ({ state, userName = '송이' }: HomeHeroProps) => {
           <>
             <span
               className="inline-block px-3 py-0.5 border border-brand-lightBlue
-              text-brand-lightBlue rounded-full text-[11px] font-bold w-fit mb-2
+              text-brand-lightBlue rounded-full text-[11px] font-bold w-fit mb-6
               bg-white/60"
             >
               D-2
@@ -73,9 +82,11 @@ export const HomeHero = ({ state, userName = '송이' }: HomeHeroProps) => {
             <h1 className="text-point-1 text-brand-navy leading-none">
               2:00 AM
             </h1>
-            <p className="text-gray-700 mt-3 text-medium-15 leading-relaxed">
+            <p className="text-gray-700 mt-3 text-light-14 leading-relaxed">
               내일{' '}
-              <strong className="text-[#0467A7]">마케팅과소비자이슈</strong>
+              <strong className="text-[#0467A7] text-medium-15">
+                마케팅과소비자이슈
+              </strong>
               <br />
               교환이 있는 날이에요
             </p>
@@ -87,7 +98,7 @@ export const HomeHero = ({ state, userName = '송이' }: HomeHeroProps) => {
       <Button
         variant="light"
         size="lg"
-        className="mt-5 backdrop-blur-sm border border-[#A8D4EF]/50"
+        className="mt-9 backdrop-blur-sm border border-[#A8D4EF]/50 !h-[44px]"
       >
         {state === 'empty' ? '교환 게시글 둘러보기' : '교환채팅방 입장하기'}
       </Button>
