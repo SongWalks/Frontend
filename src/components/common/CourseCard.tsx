@@ -2,13 +2,14 @@
 import React from 'react';
 
 interface CourseCardProps {
-  title: string; // 과목명 (예: 영어회화)
-  professor?: string; // 교수명 (예: John Smith)
-  time?: string; // 시간 (예: 화목 10:30-11:45)
-  badges?: React.ReactNode; // 하단 배지 영역
-  leftNode?: React.ReactNode; // 좌측 요소 (순위 숫자, + 아이콘 등)
-  rightNode?: React.ReactNode; // 우측 요소 (X 삭제 버튼 등)
-  className?: string; // 전체 카드 배경색 변경 등 커스텀 용도
+  title: string | React.ReactNode;
+  professor?: string;
+  time?: string;
+  badges?: React.ReactNode;
+  leftNode?: React.ReactNode;
+  rightNode?: React.ReactNode;
+  className?: string;
+  onClick?: () => void; // 💡 1. 여기에 onClick 타입을 추가합니다.
 }
 
 export const CourseCard = ({
@@ -19,11 +20,15 @@ export const CourseCard = ({
   leftNode,
   rightNode,
   className = '',
+  onClick, // 💡 2. props로 onClick을 받습니다.
 }: CourseCardProps) => {
   return (
-    // 기본적으로 회색 테두리의 둥근 박스입니다.
+    // 💡 3. 최상위 div에 onClick을 달아주고, 클릭 가능할 땐 마우스 커서를 포인터로 바꿔줍니다.
     <div
-      className={`flex items-start p-4 bg-white rounded-xl border border-gray-200 ${className}`}
+      onClick={onClick}
+      className={`flex items-start p-4 bg-white rounded-xl border border-gray-200 ${
+        onClick ? 'cursor-pointer hover:bg-gray-50' : ''
+      } ${className}`}
     >
       {/* 1. 좌측 아이콘 영역 (+버튼, 1순위 등) */}
       {leftNode && <div className="mr-3 mt-0.5 shrink-0">{leftNode}</div>}
