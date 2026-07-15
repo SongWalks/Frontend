@@ -325,6 +325,7 @@ export default function SignupPage() {
                 disabled={!isCodeSent || secondsLeft === 0}
                 isError={!!codeError}
                 errorMessage={codeError}
+                className={isCodeSent ? '!border-brand-lightBlue' : ''}
                 rightNode={
                   isCodeSent ? (
                     <span className="w-20 h-7 flex items-center justify-center rounded-xl border-[0.70px] border-brand-lightBlue bg-brand-soft text-xs font-normal font-['Pretendard'] leading-5 tracking-wide text-gray-700">
@@ -338,7 +339,7 @@ export default function SignupPage() {
             {isCodeSent && !codeError && (
               <p
                 style={{ position: 'absolute', top: 532, left: 25.4 }}
-                className="text-sm font-normal font-['Pretendard'] leading-5 tracking-wide text-blue-800"
+                className="text-sm font-normal font-['Pretendard'] leading-5 tracking-wide text-brand-blue"
               >
                 메일이 발송되었습니다
               </p>
@@ -415,7 +416,7 @@ export default function SignupPage() {
                 type="email"
                 value={email}
                 disabled
-                className="border-zinc-400"
+                className="border-zinc-400 text-neutral-400"
               />
             </div>
 
