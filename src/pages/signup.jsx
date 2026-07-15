@@ -4,6 +4,7 @@ import Button from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import { IconButton } from '@/components/common/IconButton';
+import { ICONS } from '@/constants/icons';
 import eyeIcon from '@/assets/icons/eye.svg';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
@@ -239,14 +240,14 @@ export default function SignupPage() {
           style={{
             position: 'absolute',
             top: 25,
-            left: 10,
-            opacity: 0.4, // 투명도 조절
-            transform: 'scale(1.6)', // 크기 조절
+            left: 12,
+            opacity: 0.6,
+            transform: 'scale(1.3)',
             transformOrigin: 'top left',
           }}
           className="z-10"
         >
-          <IconButton icon="mdi:chevron-left" onClick={handleBack} />
+          <IconButton icon={ICONS.BACK} onClick={handleBack} />
         </div>
 
         {step === 'email' ? (
