@@ -1,4 +1,3 @@
-// src/components/common/Input.tsx
 import React, { forwardRef } from 'react';
 import cautionIcon from '@/assets/icons/caution.svg';
 
@@ -46,10 +45,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               ${rightNode ? 'pr-11' : 'pr-4'}
               ${
                 isError
-                  ? 'border border-point-red focus:border-point-red bg-white' // 에러 상태
+                  ? 'border border-point-red focus:border-point-red bg-white'
                   : variant === 'pill'
-                    ? 'bg-gray-100 border border-transparent focus:border-gray-300' // 채팅창 상태
-                    : 'bg-white border border-gray-300 focus:border-gray-700' // 기본 상태
+                    ? 'bg-white border border-gray-300 focus:border-gray-400' // 💡 배경 흰색, 테두리 회색으로 변경
+                    : 'bg-white border border-gray-300 focus:border-gray-700'
               }
               ${className}
             `}

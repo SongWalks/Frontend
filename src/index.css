@@ -160,6 +160,7 @@ body {
   font-family: 'Pretendard', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #fbfbfb;
 }
 
 /* ==========================================
@@ -225,4 +226,13 @@ body {
   .text-light-13 {
     @apply font-sans text-[13px] leading-[20px] tracking-[0.4px] font-light;
   }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none; /* IE, 엣지(구버전) */
+  scrollbar-width: none; /* 파이어폭스 */
 }
