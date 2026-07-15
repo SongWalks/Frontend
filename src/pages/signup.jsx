@@ -264,7 +264,7 @@ export default function SignupPage() {
             <label
               style={{ position: 'absolute', top: 350, left: 21.5 }}
               className={`text-base font-medium font-['Pretendard'] leading-5 tracking-wide ${
-                emailError ? 'text-rose-500' : 'text-slate-500'
+                emailError ? 'text-point-red' : 'text-slate-500'
               }`}
             >
               숙명 이메일
@@ -308,7 +308,9 @@ export default function SignupPage() {
 
             <label
               style={{ position: 'absolute', top: 454, left: 21.5 }}
-              className="text-base font-medium font-['Pretendard'] leading-5 tracking-wide text-slate-500"
+              className={`text-base font-medium font-['Pretendard'] leading-5 tracking-wide ${
+                codeError ? 'text-point-red' : 'text-slate-500'
+              }`}
             >
               인증번호 입력
             </label>
@@ -325,7 +327,9 @@ export default function SignupPage() {
                 disabled={!isCodeSent || secondsLeft === 0}
                 isError={!!codeError}
                 errorMessage={codeError}
-                className={isCodeSent ? '!border-brand-lightBlue' : ''}
+                className={
+                  isCodeSent && !codeError ? '!border-brand-lightBlue' : ''
+                }
                 rightNode={
                   isCodeSent ? (
                     <span className="w-20 h-7 flex items-center justify-center rounded-xl border-[0.70px] border-brand-lightBlue bg-brand-soft text-xs font-normal font-['Pretendard'] leading-5 tracking-wide text-gray-700">
@@ -423,7 +427,9 @@ export default function SignupPage() {
             {/* 비밀번호 입력 */}
             <label
               style={{ position: 'absolute', top: 380.83, left: 21.5 }}
-              className="text-base font-medium font-['Pretendard'] leading-5 tracking-wide text-slate-500"
+              className={`text-base font-medium font-['Pretendard'] leading-5 tracking-wide ${
+                passwordError ? 'text-point-red' : 'text-slate-500'
+              }`}
             >
               비밀번호 입력
             </label>
@@ -450,9 +456,10 @@ export default function SignupPage() {
                 }}
                 isError={!!passwordError}
                 errorMessage={passwordError}
-                className="border-zinc-400 placeholder:text-neutral-400 placeholder:text-s placeholder:font-light"
+                className={`placeholder:text-neutral-400 placeholder:text-s placeholder:font-light ${
+                  passwordError ? '' : 'border-zinc-400'
+                }`}
                 rightNode={
-                  // 비밀번호 눈 아이콘 (Input 내부라 rightNode로 우측 정렬됨, 실제 좌표는 top:416.8 left:344.5와 일치)
                   <button
                     type="button"
                     onClick={() => setShowPw((v) => !v)}
@@ -467,7 +474,9 @@ export default function SignupPage() {
             {/* 비밀번호 확인 */}
             <label
               style={{ position: 'absolute', top: 473.83, left: 21.5 }}
-              className="text-base font-medium font-['Pretendard'] leading-5 tracking-wide text-slate-500"
+              className={`text-base font-medium font-['Pretendard'] leading-5 tracking-wide ${
+                confirmError ? 'text-point-red' : 'text-slate-500'
+              }`}
             >
               비밀번호 확인
             </label>
@@ -490,9 +499,8 @@ export default function SignupPage() {
                 }}
                 isError={!!confirmError}
                 errorMessage={confirmError}
-                className="border-zinc-400"
+                className={confirmError ? '' : 'border-zinc-400'}
                 rightNode={
-                  // 비밀번호 확인 눈 아이콘 (top:510.6 left:344.5와 일치)
                   <button
                     type="button"
                     onClick={() => setShowPwConfirm((v) => !v)}
