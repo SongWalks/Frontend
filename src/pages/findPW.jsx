@@ -381,7 +381,9 @@ export default function FindPasswordPage() {
             {/* 새 비밀번호 (비밀번호 찾기 단계와 동일한 위치) */}
             <label
               style={{ position: 'absolute', top: 350, left: 21.5 }}
-              className="text-base font-medium font-['Pretendard'] leading-5 tracking-wide text-slate-500"
+              className={`text-base font-medium font-['Pretendard'] leading-5 tracking-wide ${
+                passwordError ? 'text-point-red' : 'text-slate-500'
+              }`}
             >
               새 비밀번호
             </label>
@@ -405,7 +407,9 @@ export default function FindPasswordPage() {
                 }}
                 isError={!!passwordError}
                 errorMessage={passwordError}
-                className="border-zinc-400 placeholder:text-neutral-400 placeholder:text-s placeholder:font-light"
+                className={`placeholder:text-neutral-400 placeholder:text-s placeholder:font-light ${
+                  passwordError ? '' : 'border-zinc-400'
+                }`}
                 rightNode={
                   <button
                     type="button"
@@ -421,7 +425,9 @@ export default function FindPasswordPage() {
             {/* 비밀번호 확인 */}
             <label
               style={{ position: 'absolute', top: 454, left: 21.5 }}
-              className="text-base font-medium font-['Pretendard'] leading-5 tracking-wide text-slate-500"
+              className={`text-base font-medium font-['Pretendard'] leading-5 tracking-wide ${
+                confirmError ? 'text-point-red' : 'text-slate-500'
+              }`}
             >
               비밀번호 확인
             </label>
@@ -443,7 +449,7 @@ export default function FindPasswordPage() {
                 }}
                 isError={!!confirmError}
                 errorMessage={confirmError}
-                className="border-zinc-400"
+                className={confirmError ? '' : 'border-zinc-400'}
                 rightNode={
                   <button
                     type="button"
