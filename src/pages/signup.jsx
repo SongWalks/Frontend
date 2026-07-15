@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/components/common/Button';
@@ -210,11 +211,6 @@ export default function SignupPage() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const goToLogin = () => {
-    setShowCompleteModal(false);
-    navigate('/login');
   };
 
   const isSendDisabled =
