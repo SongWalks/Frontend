@@ -318,6 +318,7 @@ export default function FindPasswordPage() {
                 disabled={!isCodeSent || secondsLeft === 0}
                 isError={!!codeError}
                 errorMessage={codeError}
+                className={isCodeSent ? '!border-brand-lightBlue' : ''}
                 rightNode={
                   isCodeSent ? (
                     <span className="w-20 h-7 flex items-center justify-center rounded-xl border-[0.70px] border-brand-lightBlue bg-brand-soft text-xs font-normal font-['Pretendard'] leading-5 tracking-wide text-gray-700">
@@ -331,7 +332,7 @@ export default function FindPasswordPage() {
             {isCodeSent && !codeError && (
               <p
                 style={{ position: 'absolute', top: 532, left: 25.4 }}
-                className="text-sm font-normal font-['Pretendard'] leading-5 tracking-wide text-blue-800"
+                className="text-sm font-normal font-['Pretendard'] leading-5 tracking-wide text-brand-blue"
               >
                 메일이 발송되었습니다
               </p>
@@ -480,7 +481,11 @@ export default function FindPasswordPage() {
       <Modal
         isOpen={showCompleteModal}
         onClose={() => setShowCompleteModal(false)}
-        title={<div className="mt-10">비밀번호가 변경되었습니다.</div>}
+        title={
+          <div className="mt-10 text-base font-medium">
+            비밀번호가 변경되었습니다.
+          </div>
+        }
         footer={
           <Button
             variant="primary"
@@ -491,7 +496,7 @@ export default function FindPasswordPage() {
           </Button>
         }
       >
-        <div className="h-8" />
+        <div className="h-2" />
       </Modal>
     </div>
   );
