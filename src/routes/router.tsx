@@ -1,3 +1,4 @@
+import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 // --- 1. 레이아웃 불러오기 ---
@@ -20,6 +21,7 @@ import { TestLoading } from '../pages/TestLoading';
 import LoginPage from '../pages/login/login';
 import SignupPage from '../pages/signup';
 import FindPWPage from '../pages/findPW';
+import AlertPage from '../pages/alert';
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +47,7 @@ export const router = createBrowserRouter([
           { path: '/test-extra', element: <TestExtra /> },
           { path: '/test-avatar', element: <TestAvatar /> },
           { path: '/test-loading', element: <TestLoading /> },
+          { path: '/alert', element: <AlertPage /> },
         ],
       },
       {
