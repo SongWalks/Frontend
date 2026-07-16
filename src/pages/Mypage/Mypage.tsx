@@ -112,7 +112,7 @@ const MyPage = () => {
       title: '북마크 목록',
       description: '관심있는 라운지 게시글 모아보기',
       fontSizeClass: 'text-[16px]',
-      onClick: () => navigate('/my/bookmark'),
+      onClick: () => navigate('/my/bookmarks'),
     },
   ];
 

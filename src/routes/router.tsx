@@ -8,6 +8,12 @@ import FullScreenLayout from '@/components/layout/FullScreenLayout';
 // --- 2. 페이지 불러오기 ---
 // 💡 마이페이지 컴포넌트를 정상적으로 임포트해 줍니다! (폴더 경로명이 소문자/대문자일 수 있으니 확인해 주세요)
 import Mypage from '../pages/Mypage/Mypage';
+import PasswordChangepage from '../pages/Mypage/PasswordChangepage';
+import MyPostpage from '../pages/Mypage/MyPostpage';
+import LikeListPage from '@/pages/Mypage/LikeListPage';
+import GraduationPage from '@/pages/Mypage/GraduationPage';
+import MyLoungePostsPage from '@/pages/Mypage/MyLoungePostsPage';
+import MyBookmarkPage from '@/pages/Mypage/MyBookmarkPage';
 
 import { TestButton } from '../pages/TestButton';
 import { TestHeader } from '../pages/TestHeader';
@@ -29,9 +35,17 @@ export const router = createBrowserRouter([
         // ==========================================
         element: <DefaultLayout />,
         children: [
-          // 💡 마이페이지 등록: /my 주소로 들어오면 하단바와 함께 MyPage를 띄웁니다!
-          { path: 'my', element: <Mypage /> },
-
+          {
+            path: 'my',
+            children: [
+              { index: true, element: <Mypage /> },
+              { path: 'password-change', element: <PasswordChangepage /> },
+              { path: 'posts', element: <MyPostpage /> },
+              { path: 'likes', element: <LikeListPage /> },
+              { path: 'lounge', element: <MyLoungePostsPage /> },
+              { path: 'bookmarks', element: <MyBookmarkPage /> }, // 추가된 경로
+            ],
+          },
           { path: '/test-input', element: <TestInput /> },
           { path: '/test-modal', element: <TestModal /> },
           { path: '/test-button', element: <TestButton /> },
@@ -49,6 +63,7 @@ export const router = createBrowserRouter([
         // ==========================================
         element: <FullScreenLayout />,
         children: [
+          { path: '/my/graduation', element: <GraduationPage /> },
           // 상세페이지 등은 여기에 등록됩니다.
         ],
       },

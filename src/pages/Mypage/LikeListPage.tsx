@@ -8,7 +8,6 @@ import { EmptyState } from '../../components/common/EmptyState';
 import axiosInstance from '@/api/axiosInstance';
 
 import searchIcon from '@/assets/icons/search_icon.svg';
-import cautionBlueIcon from '@/assets/icons/caution_blue.svg';
 import redHeartIcon from '@/assets/icons/red_heart.svg';
 import grayHeartIcon from '@/assets/icons/gray_heart.svg';
 
@@ -176,13 +175,6 @@ const LikeListPage = () => {
       <div className="flex-1 px-5 pt-2">
         {filteredPosts.length === 0 ? (
           <EmptyState
-            icon={
-              <img
-                src={cautionBlueIcon}
-                alt="Caution"
-                className="w-12 h-12 select-none"
-              />
-            }
             title="아직 등록한 교환 게시글이 없어요."
             description={`교환하려는 과목을 등록하고\n원하는 과목을 찾아보세요!`}
             className="h-[50vh] justify-center"

@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import { IconButton } from '@/components/common/IconButton';
 import { ICONS } from '@/constants/icons';
-
-import cautionBlueIcon from '@/assets/icons/caution_blue.svg';
+import { EmptyState } from '@/components/common/EmptyState';
+import { FAB } from '@/components/common/FAB';
 
 // 💡 1. API 연동을 위한 데이터 인터페이스 정의
 interface CategoryTag {
   label: string;
-  style: string; // Tailwind 클래스를 직접 주입하여 카테고리별 다채로운 스타일 구현
+  style: string;
 }
 
-interface LoungePost {
+interface BookmarkPost {
   id: number;
   title: string;
   content: string;
@@ -24,8 +24,8 @@ interface LoungePost {
   isBookmarked: boolean;
 }
 
-// 💡 2. 테스트용 목업 데이터 (API 연동 시 이 부분을 서버 데이터로 교체하세요!)
-const MOCK_LOUNGE_POSTS: LoungePost[] = [
+// 💡 2. 테스트용 목업 데이터
+const MOCK_BOOKMARK_POSTS: BookmarkPost[] = [
   {
     id: 1,
     title: '데이터베이스 001분반 증원',
@@ -38,7 +38,7 @@ const MOCK_LOUNGE_POSTS: LoungePost[] = [
     subjectTag: '데이터베이스',
     likeCount: 12,
     commentCount: 2,
-    isBookmarked: false,
+    isBookmarked: true, // 북마크 페이지이므로 true로 설정
   },
   {
     id: 2,
@@ -52,19 +52,66 @@ const MOCK_LOUNGE_POSTS: LoungePost[] = [
     subjectTag: '운영체제',
     likeCount: 12,
     commentCount: 2,
-    isBookmarked: false,
+    isBookmarked: true, // 북마크 페이지이므로 true로 설정
   },
 ];
 
+// 카드 내 인라인 아이콘 컴포넌트들
+const ClockIcon = () => (
+  <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5 text-zinc-400">
+    <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.3" />
+    <path
+      d="M8 4.5V8l2.5 1.5"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const HeartIcon = () => (
+  <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4 text-neutral-500">
+    <path
+      d="M8 13.5S1.75 9.86 1.75 5.75a3.25 3.25 0 0 1 6.25-1.32A3.25 3.25 0 0 1 14.25 5.75c0 4.11-6.25 7.75-6.25 7.75Z"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinejoin="round"
+      fill="none"
+    />
+  </svg>
+);
+
+const BookmarkIcon = ({ filled }: { filled?: boolean }) => (
+  <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4 text-neutral-500">
+    <path
+      d="M3.5 2.5h9v11l-4.5-3-4.5 3v-11Z"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinejoin="round"
+      fill={filled ? 'currentColor' : 'none'}
+    />
+  </svg>
+);
+
+const CommentIcon = () => (
+  <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4 text-neutral-500">
+    <path
+      d="M2 3.5h12v7.5H6.5L3.5 13.5v-2.5H2v-7.5Z"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const MyBookmarkPage: React.FC = () => {
   const navigate = useNavigate();
-
-  // 테스트용 게시글 데이터 상태 (MOCK 데이터로 초기화)
-  const [posts, setPosts] = useState<LoungePost[]>(MOCK_LOUNGE_POSTS);
+  const [posts] = useState<BookmarkPost[]>(MOCK_BOOKMARK_POSTS);
+  // const [posts] = useState<BookmarkPost[]>([]); // 빈화면
 
   return (
-    <div className="w-full min-h-screen bg-neutral-50 flex flex-col font-['Pretendard']">
-      {/* 상단 헤더 영역 고정 */}
+    <div className="relative w-full h-full min-h-0 flex flex-col font-['Pretendard']">
       <div className="sticky top-0 z-50 bg-neutral-50">
         <Header
           leftNode={
@@ -89,131 +136,60 @@ const MyBookmarkPage: React.FC = () => {
         />
       </div>
 
-      {/* 중앙 메인 콘텐츠 영역 */}
-      <div className="flex-1 flex flex-col px-4 pt-4 pb-10">
+      <div className="flex-1 min-h-0 overflow-y-auto bg-neutral-50">
         {posts.length === 0 ? (
-          // 게시글이 없을 때 (Empty State)
-          <div className="flex-1 flex flex-col items-center justify-center transform -translate-y-10">
-            <img
-              src={cautionBlueIcon}
-              alt="No posts caution"
-              className="w-12 h-12 mb-6 select-none"
+          <div className="h-full flex flex-col items-center justify-center">
+            <EmptyState
+              title="아직 북마크한 라운지 게시글이 없어요."
+              className="!min-h-0"
             />
-            <div className="text-sm font-medium text-black leading-5 tracking-wide">
-              아직 북마크한 라운지 게시글이 없어요.
-            </div>
           </div>
         ) : (
-          // 게시글이 있을 때 (List State)
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 px-4 pt-4 pb-24">
             {posts.map((post) => (
               <div
                 key={post.id}
                 onClick={() => navigate(`/lounge/${post.id}`)}
-                className="w-full bg-white rounded-lg border border-zinc-300 p-[15px] flex flex-col cursor-pointer hover:bg-neutral-50 transition-colors"
+                className="relative bg-white rounded-lg border border-zinc-400 p-4 cursor-pointer hover:bg-gray-50 active:bg-gray-100 transition-colors"
               >
-                {/* 1. 상단: 제목 & 작성 시간 */}
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-zinc-900 text-base font-bold leading-5 tracking-wide line-clamp-1">
+                <div className="flex items-start justify-between pr-6">
+                  <h3 className="text-base font-bold text-zinc-900 leading-5 tracking-wide">
                     {post.title}
                   </h3>
-                  <div className="flex items-center gap-1 text-neutral-500 text-xs font-normal shrink-0 ml-2">
-                    {/* 시계 아이콘 */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-3.5 h-3.5 text-zinc-400"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>{post.createdAt}</span>
-                  </div>
                 </div>
-
-                {/* 2. 중단: 본문 내용 (미리보기) */}
-                <p className="text-neutral-500 text-xs font-light leading-5 tracking-wide mb-4 line-clamp-1">
+                <div className="flex items-center gap-1 mt-0.5">
+                  <ClockIcon />
+                  <span className="text-xs font-normal text-neutral-500 leading-5 tracking-wide">
+                    {post.createdAt}
+                  </span>
+                </div>
+                <p className="text-xs font-light text-neutral-500 leading-5 tracking-wide mt-1">
                   {post.content}
                 </p>
-
-                {/* 3. 하단: 태그 & 리액션(좋아요, 북마크, 댓글) */}
-                <div className="flex justify-between items-end">
-                  {/* 왼쪽 태그 그룹 */}
-                  <div className="flex items-center gap-1.5">
-                    {/* 카테고리 태그 (스타일 동적 적용) */}
-                    <div
-                      className={`px-[11px] py-[2.5px] rounded-lg border ${post.categoryTag.style} flex items-center justify-center`}
+                <div className="flex items-center justify-between mt-3">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`h-6 px-2.5 flex items-center justify-center rounded-lg text-xs font-normal leading-5 tracking-wide border ${post.categoryTag.style}`}
                     >
-                      <span className="text-xs font-normal leading-5 tracking-wide">
-                        {post.categoryTag.label}
-                      </span>
-                    </div>
-                    {/* 과목 태그 (회색 고정) */}
-                    <div className="px-[11px] py-[2.5px] rounded-lg bg-gray-200 border border-transparent flex items-center justify-center">
-                      <span className="text-zinc-900 text-xs font-normal leading-5 tracking-wide">
-                        {post.subjectTag}
-                      </span>
-                    </div>
+                      {post.categoryTag.label}
+                    </span>
+                    <span className="h-6 px-2.5 flex items-center justify-center bg-gray-200 rounded-lg text-xs font-normal text-zinc-900 leading-5 tracking-wide">
+                      {post.subjectTag}
+                    </span>
                   </div>
-
-                  {/* 오른쪽 리액션 아이콘 그룹 */}
-                  <div className="flex items-center gap-3 text-neutral-500 text-xs font-normal">
-                    {/* 좋아요 */}
+                  <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-[15px] h-[15px]"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                        />
-                      </svg>
-                      <span>{post.likeCount}</span>
+                      <HeartIcon />
+                      <span className="text-xs font-normal text-neutral-500 leading-5 tracking-wide">
+                        {post.likeCount}
+                      </span>
                     </div>
-                    {/* 북마크 */}
-                    <div className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-[15px] h-[15px]"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-                        />
-                      </svg>
-                    </div>
-                    {/* 댓글 */}
+                    <BookmarkIcon filled={post.isBookmarked} />
                     <div className="flex items-center gap-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-[15px] h-[15px]"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"
-                        />
-                      </svg>
-                      <span>{post.commentCount}</span>
+                      <CommentIcon />
+                      <span className="text-xs font-normal text-neutral-500 leading-5 tracking-wide">
+                        {post.commentCount}
+                      </span>
                     </div>
                   </div>
                 </div>
