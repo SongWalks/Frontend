@@ -4,10 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import { IconButton } from '@/components/common/IconButton';
 import { Toast } from '@/components/common/Toast';
-import { Modal } from '@/components/common/Modal';
-import Button from '@/components/common/Button';
 import { ICONS } from '@/constants/icons';
-import { subscribeToPush } from '@/api/push';
 
 // 💡 알림 타입별 아이콘 - src/assets/icons 안의 실제 파일명으로 교체하세요.
 import matchIcon from '@/assets/icons/matchoffer.svg';
@@ -128,10 +125,6 @@ export default function AlertPage() {
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
 
-  // 👇 점 세개(더보기) 눌렀을 때 뜨는 알림 권한 동의 모달
-  const [isPermissionModalOpen, setIsPermissionModalOpen] = useState(false);
-  const [isSubscribing, setIsSubscribing] = useState(false);
-
   useEffect(() => {
     fetchNotifications();
   }, []);
@@ -190,40 +183,10 @@ export default function AlertPage() {
     }
   };
 
-  // 점 세개 클릭 -> 권한 동의 모달 오픈
-  const handleOpenPermissionModal = () => {
-    setIsPermissionModalOpen(true);
-  };
-
-  // 모달에서 "동의" 클릭 -> 실제 권한 요청 + 구독
-  const handleAgreePush = async () => {
-    setIsSubscribing(true);
-    try {
-      const result = await subscribeToPush();
-      if (!result.success) {
-        showToast(
-          result.reason === 'denied'
-            ? '브라우저 알림 권한이 거부되었습니다.'
-            : '푸시 알림을 사용할 수 없는 환경입니다.',
-        );
-      } else {
-        showToast('알림이 활성화되었습니다.');
-      }
-    } finally {
-      setIsSubscribing(false);
-      setIsPermissionModalOpen(false);
-    }
-  };
-
   // 👇 실제 푸시 서버 없이도 "알림 오는 거" 눈으로 확인하기 위한 mock 발송 버튼
   // 브라우저 알림 권한만 허용돼 있으면, 서버 없이 Service Worker의 showNotification을
   // 직접 호출해서 진짜 OS 알림창을 띄울 수 있습니다.
   const handleSendMockPush = async () => {
-    if (Notification.permission !== 'granted') {
-      showToast('먼저 알림 권한을 허용해주세요.');
-      setIsPermissionModalOpen(true);
-      return;
-    }
     const registration = await navigator.serviceWorker.ready;
     registration.showNotification('✨ 새로운 매칭 제안', {
       body: '데이터베이스 의 1순위 과목을 찾았습니다!\n교환을 제안해보세요!',
@@ -234,10 +197,10 @@ export default function AlertPage() {
   };
 
   return (
-    <div className="relative bg-white mx-auto overflow-hidden font-['Pretendard'] h-full flex flex-col">
+    <div className="relative bg-[#fbfbfb] mx-auto overflow-hidden font-['Pretendard'] h-full flex flex-col">
       <div
         style={{ '--header-h': `${HEADER_H}px` }}
-        className="[&>header]:!h-[var(--header-h)] sticky top-0 z-20 bg-white"
+        className="[&>header]:!h-[var(--header-h)] sticky top-0 z-20 bg-[#fbfbfb]"
       >
         <Header
           leftNode={
@@ -256,12 +219,6 @@ export default function AlertPage() {
             </div>
           }
           title={<span style={{ color: '#000000B2' }}>알림</span>}
-          rightNode={
-            <IconButton
-              icon={ICONS.MORE_VERTICAL}
-              onClick={handleOpenPermissionModal}
-            />
-          }
         />
       </div>
 
@@ -286,7 +243,7 @@ export default function AlertPage() {
         🔔
       </button>
 
-      <div className="flex flex-col overflow-y-auto flex-1 min-h-0">
+      <div className="flex flex-col overflow-y-auto flex-1 min-h-0 bg-[#fbfbfb]">
         {isLoading && (
           <div className="flex justify-center items-center py-10 text-gray-400 text-sm">
             불러오는 중...
@@ -308,7 +265,7 @@ export default function AlertPage() {
               type="button"
               onClick={() => handleNotificationClick(item)}
               className={`flex items-start gap-3 px-5 py-4 text-left border-b border-gray-100 transition-colors ${
-                item.isRead ? 'bg-white' : 'bg-[#F1F7FB]'
+                item.isRead ? 'bg-[#fbfbfb]' : 'bg-[#F1F7FB]'
               }`}
             >
               <span
@@ -339,36 +296,6 @@ export default function AlertPage() {
           );
         })}
       </div>
-
-      {/* 알림 권한 동의 모달 */}
-      <Modal
-        isOpen={isPermissionModalOpen}
-        onClose={() => setIsPermissionModalOpen(false)}
-        title="알림을 받아보시겠어요?"
-        footer={
-          <div className="flex gap-2 w-full">
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => setIsPermissionModalOpen(false)}
-            >
-              나중에
-            </Button>
-            <Button
-              variant="primary"
-              size="lg"
-              disabled={isSubscribing}
-              onClick={handleAgreePush}
-            >
-              {isSubscribing ? '설정 중...' : '동의하기'}
-            </Button>
-          </div>
-        }
-      >
-        매칭 제안, 교환 요청, 시간 확정 등 중요한 소식을
-        <br />
-        놓치지 않도록 알림을 보내드릴게요.
-      </Modal>
 
       <Toast
         message={toastMessage}
