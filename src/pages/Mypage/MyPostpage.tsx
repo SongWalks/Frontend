@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import { IconButton } from '@/components/common/IconButton';
 import { ICONS } from '@/constants/icons';
+import { EmptyState } from '@/components/common/EmptyState';
 
 type TabType = '전체' | '교환 전' | '교환 중' | '교환 완료';
 
@@ -121,20 +122,12 @@ const MyPostpage = () => {
       {/* 게시글 목록 영역 */}
       <div className="flex-1 px-5 py-2">
         {filteredPosts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-[60vh]">
-            <div className="mb-4 flex items-center justify-center">
-              <img
-                src={ICONS.CAUTION}
-                alt="Caution Icon"
-                className="w-12 h-12 select-none"
-              />
-            </div>
-            <p className="font-semibold text-gray-600">
-              아직 등록한 교환 게시글이 없어요.
-            </p>
-            <p className="text-sm text-gray-400 mt-1 text-center">
-              교환하려는 과목을 등록하고 원하는 과목을 찾아보세요!
-            </p>
+          <div className="flex h-[60vh] items-center justify-center">
+            <EmptyState
+              className="min-h-0"
+              title="아직 등록한 교환 게시글이 없어요."
+              description="교환하려는 과목을 등록하고 원하는 과목을 찾아보세요!"
+            />
           </div>
         ) : (
           <div className="flex flex-col split-y divide-y divide-gray-100">
