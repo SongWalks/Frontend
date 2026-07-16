@@ -142,7 +142,6 @@ const MyLoungePostsPage: React.FC = () => {
               className="text-black/40"
             />
           }
-          hideBorder
         />
       </div>
 
