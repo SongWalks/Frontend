@@ -9,7 +9,7 @@ interface HeaderProps {
 export default function Header({ leftNode, title, rightNode }: HeaderProps) {
   return (
     // 💡 높이를 56px(모바일 표준)로 고정하고, z-index를 높여 스크롤 시 위로 올라오게 합니다.
-    <header className="relative flex justify-between items-center w-full h-[60px] px-4 bg-white border-b border-gray-200 z-50">
+    <header className="relative flex justify-between items-center w-full h-[60px] px-4 bg-[#FBFBFB] border-b border-gray-200 z-50">
       {/* 1. 왼쪽 영역 (뒤로가기 버튼 or 메인 로고) */}
       <div className="flex items-center z-10">{leftNode}</div>
 
