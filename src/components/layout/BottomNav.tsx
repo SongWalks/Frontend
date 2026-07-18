@@ -19,7 +19,7 @@ export default function BottomNav() {
       id: 'chat',
       label: '교환채팅방',
       path: '/chat',
-      icon: 'ph:chat-circle-dots-fill',
+      icon: 'ph:chat-circle-dots',
     },
     { id: 'lounge', label: '라운지', path: '/lounge', icon: 'mdi:snowflake' },
     { id: 'my', label: '마이페이지', path: '/my', icon: 'ph:user' },
@@ -43,13 +43,13 @@ export default function BottomNav() {
           >
             {/* 아이콘 영역 (활성화 시 파란색 동그라미 배경 + 흰색 아이콘) */}
             <div
-              className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors duration-200 ${
+              className={`flex items-center justify-center shrink-0 w-10 h-10 rounded-full transition-colors duration-200 ${
                 isActive
                   ? 'bg-brand-lightBlue text-white' // 활성화: 파란 원 배경, 흰색 아이콘 (아까 쓰신 색상 변수명)
                   : 'bg-transparent text-gray-400' // 비활성화: 투명 배경, 회색 아이콘
               }`}
             >
-              <Icon icon={item.icon} className="text-[24px]" />
+              <Icon icon={item.icon} className="text-[24px] block" />{' '}
             </div>
 
             {/* 텍스트 영역 (활성화 시 파란색 글씨) */}
