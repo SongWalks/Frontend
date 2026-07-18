@@ -3,8 +3,8 @@ import React from 'react';
 
 interface CourseCardProps {
   title: string | React.ReactNode;
-  professor?: string;
-  time?: string;
+  professor?: string | React.ReactNode;
+  time?: string | React.ReactNode;
   badges?: React.ReactNode;
   leftNode?: React.ReactNode;
   rightNode?: React.ReactNode;
@@ -35,11 +35,12 @@ export const CourseCard = ({
 
       {/* 2. 중앙 텍스트 및 배지 영역 (flex-1로 남는 공간 다 차지함) */}
       <div className="flex flex-col flex-1 gap-1.5">
-        <h4 className="font-bold text-gray-900 text-[15px]">{title}</h4>
+        <h4 className="font-semibold text-gray-900 text-[15px]">{title}</h4>
 
         {/* 교수, 시간 정보가 있을 때만 렌더링 */}
+
         {(professor || time) && (
-          <div className="text-xs text-gray-500 leading-tight">
+          <div className="text-neutral-500 text-sm font-light font-['Pretendard'] leading-5 whitespace-nowrap">
             {professor && <p>교수 : {professor}</p>}
             {time && <p>시간 : {time}</p>}
           </div>

@@ -30,11 +30,19 @@ export default function BottomNav() {
       {navItems.map((item) => {
         // 현재 주소와 메뉴의 path가 일치하는지 확인 (활성화 여부)
         // (단, '/' 홈 경로는 정확히 일치할 때만 활성화하고, 나머지는 포함되면 활성화)
+        //const isActive =
+        //item.path === '/'
+        // ? location.pathname === '/'
+        // : location.pathname.startsWith(item.path);
+        //캡처용으로 임시 코드 나중에 지우기
         const isActive =
-          item.path === '/'
-            ? location.pathname === '/'
-            : location.pathname.startsWith(item.path);
-
+          item.id === 'my'
+            ? location.pathname.startsWith('/my') ||
+              location.pathname.startsWith('/exchange-recommend') ||
+              location.pathname.startsWith('/specific')
+            : item.path === '/'
+              ? location.pathname === '/'
+              : location.pathname.startsWith(item.path);
         return (
           <button
             key={item.id}

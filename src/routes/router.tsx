@@ -6,6 +6,8 @@ import DefaultLayout from '@/components/layout/DefaultLayout';
 import FullScreenLayout from '@/components/layout/FullScreenLayout';
 
 // --- 2. 페이지 불러오기 (임시 예시) ---
+import ExchangeRecommendPage from '@/pages/ExchangeRecommendPage/ExchangeRecommendPage';
+import SpecificPostsPage from '@/pages/ExchangeRecommendPage/SpecificPostsPage';
 import { TestButton } from '../pages/TestButton';
 import { TestHeader } from '../pages/TestHeader';
 import { TestInput } from '../pages/TestInput';
@@ -25,8 +27,18 @@ export const router = createBrowserRouter([
         // 💡 1번 그룹: 하단 네비게이션(BottomNav)이 있는 화면들
         // ==========================================
         element: <DefaultLayout />,
+
         children: [
-          // 예시: { path: 'board', element: <BoardPage /> },    // /board (교환게시판)
+          {
+            //나중에 다 머지한 뒤에 라우터 수정
+            path: 'exchange-recommend',
+            element: <ExchangeRecommendPage />,
+          },
+          {
+            path: 'specific',
+            element: <SpecificPostsPage />,
+          },
+
           { path: '/test-input', element: <TestInput /> },
           { path: '/test-modal', element: <TestModal /> },
           { path: '/test-button', element: <TestButton /> },
