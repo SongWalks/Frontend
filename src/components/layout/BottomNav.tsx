@@ -41,15 +41,17 @@ export default function BottomNav() {
             onClick={() => navigate(item.path)}
             className="flex flex-col items-center justify-center gap-1 w-16"
           >
-            {/* 아이콘 영역 (활성화 시 파란색 동그라미 배경 + 흰색 아이콘) */}
             <div
-              className={`flex items-center justify-center shrink-0 w-10 h-10 rounded-full transition-colors duration-200 ${
+              className={`relative shrink-0 w-10 h-10 rounded-full transition-colors duration-200 ${
                 isActive
-                  ? 'bg-brand-lightBlue text-white' // 활성화: 파란 원 배경, 흰색 아이콘 (아까 쓰신 색상 변수명)
-                  : 'bg-transparent text-gray-400' // 비활성화: 투명 배경, 회색 아이콘
+                  ? 'bg-brand-lightBlue text-white'
+                  : 'bg-transparent text-gray-400'
               }`}
             >
-              <Icon icon={item.icon} className="text-[24px] block" />{' '}
+              <Icon
+                icon={item.icon}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 block"
+              />
             </div>
 
             {/* 텍스트 영역 (활성화 시 파란색 글씨) */}
