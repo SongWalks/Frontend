@@ -17,11 +17,11 @@ export const PostDetailPage = () => {
   const [commentInput, setCommentInput] = useState('');
 
   return (
-    <div className="relative w-full h-full flex flex-col bg-white overflow-hidden">
+    <div className="relative w-full h-full flex flex-col overflow-hidden">
       {/* =========================================================
           1. 상단 헤더 영역
          ========================================================= */}
-      <div className="shrink-0 w-full z-30 bg-white relative">
+      <div className="shrink-0 w-full z-30 relative">
         <Header
           leftNode={
             <IconButton
@@ -76,7 +76,7 @@ export const PostDetailPage = () => {
         <div className="px-5 pt-4 pb-6">
           {/* 배지 */}
           <div className="flex gap-2 mb-4">
-            <Badge variant="primary">강의꿀팁</Badge>
+            <Badge variant="primary">강의 꿀팁</Badge>
             <Badge variant="secondary">데이터베이스</Badge>
           </div>
 
@@ -113,7 +113,7 @@ export const PostDetailPage = () => {
           <div className="w-[1px] bg-gray-200" />
           <button className="flex-1 flex items-center justify-center gap-1.5 hover:text-gray-600 transition-colors">
             <Icon icon="ph:chat-circle" className="text-[18px]" />
-            댓글2
+            댓글 2
           </button>
           <div className="w-[1px] bg-gray-200" />
           <button className="flex-1 flex items-center justify-center gap-1.5 hover:text-gray-600 transition-colors">
@@ -124,9 +124,9 @@ export const PostDetailPage = () => {
 
         {/* 댓글 목록 영역 */}
         <div className="px-5 py-6">
-          <div className="flex items-center gap-1.5 font-bold text-[#14476F] mb-6">
+          <div className="flex items-center gap-1.5 font-bold text-brand-navy mb-6">
             <Icon icon="ph:chat-circle" className="text-[18px]" />
-            <span>댓글2</span>
+            <span>댓글 2</span>
           </div>
 
           <div className="space-y-6">
@@ -167,7 +167,7 @@ export const PostDetailPage = () => {
       {/* =========================================================
           3. 하단 댓글 입력창 (고정)
          ========================================================= */}
-      <div className="absolute bottom-0 left-0 w-full bg-white px-4 py-3 pb-safe z-30">
+      <div className="absolute bottom-0 left-0 w-full px-4 py-3 pb-safe z-30">
         {/* 💡 하단 인풋창을 Input 컴포넌트(pill 스타일)로 교체하고 rightNode에 버튼을 배치했습니다. */}
         <Input
           variant="pill"
