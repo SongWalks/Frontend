@@ -6,8 +6,6 @@ import DefaultLayout from '@/components/layout/DefaultLayout';
 import FullScreenLayout from '@/components/layout/FullScreenLayout';
 
 // --- 2. 페이지 불러오기 (임시 예시) ---
-// import BoardPage from '@/pages/BoardPage';
-// import DetailPage from '@/pages/DetailPage';
 import { TestButton } from '../pages/TestButton';
 import { TestHeader } from '../pages/TestHeader';
 import { TestInput } from '../pages/TestInput';
@@ -22,16 +20,12 @@ import HomePage from '@/pages/home/HomePage';
 
 export const router = createBrowserRouter([
   {
-    // ==========================================
-    // 💡 0번 그룹: [최상위 뼈대] 375px 모바일 뷰포트 고정
-    // ==========================================
-    element: <RootLayout />, // path 없이 element만 적습니다.
+    element: <RootLayout />,
     children: [
       {
         // ==========================================
         // 💡 1번 그룹: 하단 네비게이션(BottomNav)이 있는 화면들
         // ==========================================
-        path: '/',
         element: <DefaultLayout />,
         children: [
           // 예시: { path: 'board', element: <BoardPage /> },    // /board (교환게시판)
@@ -52,7 +46,6 @@ export const router = createBrowserRouter([
         // ==========================================
         // 💡 2번 그룹: 하단 바 없이 전체 화면을 쓰는 화면들
         // ==========================================
-        path: '/',
         element: <FullScreenLayout />,
         children: [
           // :id 나 :roomId 는 동적 라우팅 기법입니다. (ex. /board/123)
