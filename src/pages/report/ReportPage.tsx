@@ -64,11 +64,9 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] w-full bg-white relative overflow-hidden">
+    <div className="flex flex-col h-[100dvh] w-full relative overflow-hidden">
       <Header
-        leftNode={
-          <IconButton icon="ph:caret-left" onClick={() => navigate(-1)} />
-        }
+        leftNode={<IconButton icon={ICONS.BACK} onClick={() => navigate(-1)} />}
         title="신고"
         rightNode={
           <div className="relative">
@@ -206,7 +204,7 @@ export default function ReportPage() {
         </section>
       </main>
 
-      <div className="w-full px-5 pb-8 pt-3 bg-white shrink-0 z-10">
+      <div className="w-full px-5 pb-8 pt-3 shrink-0 z-10">
         <Button
           size="lg"
           variant="primary"

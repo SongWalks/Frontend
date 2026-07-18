@@ -9,12 +9,10 @@ export default function ReportSuccessPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-col h-screen w-full bg-white relative">
+    <div className="flex flex-col h-screen w-full relative">
       {/* ── 1. 헤더 ── */}
       <Header
-        leftNode={
-          <IconButton icon="ph:caret-left" onClick={() => navigate(-1)} />
-        }
+        leftNode={<IconButton icon={ICONS.BACK} onClick={() => navigate(-1)} />}
         title="신고"
         rightNode={
           <div className="relative">
@@ -31,7 +29,7 @@ export default function ReportSuccessPage() {
           <div className="w-[52px] h-[52px] rounded-full border-[4px] border-brand-lightBlue flex justify-center items-center">
             {/* 체크 마크 */}
             <Icon
-              icon="ph:check-bold"
+              icon={ICONS.CHECK}
               className="text-[32px] text-brand-lightBlue"
             />
           </div>
