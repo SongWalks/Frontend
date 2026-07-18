@@ -249,10 +249,11 @@ export const LoungePage = () => {
                   </div>
                 }
                 rightNode={
-                  <div className="flex flex-col items-end gap-3 text-gray-400 text-[13px] h-full justify-between pt-1">
-                    <span className="text-[12px] whitespace-nowrap">
-                      {post.date}
-                    </span>
+                  <div className="flex flex-col items-end gap-3 text-gray-500 text-[13px] h-full justify-between pt-1">
+                    <div className="flex items-center gap-1 text-[12px] whitespace-nowrap text-gray-500">
+                      <Icon icon="ph:clock-fill" className="text-[14px]" />
+                      <span>{post.date}</span>
+                    </div>
                     <div className="flex gap-2.5">
                       <div className="flex items-center gap-0.5">
                         <Icon icon="ph:heart" className="text-[16px]" />
@@ -286,7 +287,8 @@ export const LoungePage = () => {
 
       {/* FAB 버튼 고정 */}
       <div className="absolute bottom-6 right-4 z-[100]">
-        <FAB icon={ICONS.PLUS} onClick={() => {}} />
+        {/* 💡 onClick 이벤트에 글쓰기 페이지로 이동하는 navigate 추가 */}
+        <FAB icon={ICONS.PLUS} onClick={() => navigate('/lounge/write')} />
       </div>
     </div>
   );
