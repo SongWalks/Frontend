@@ -28,10 +28,10 @@ export const ReceivedRequestCard = ({
       </h3>
       <p className="text-gray-400 text-light-13 truncate">↔ {targetSubject}</p>
 
-      {/* 타이머 */}
+      {/* 💡 타이머 영역 수정: 오른쪽 아래로 배치 (justify-end, mt-auto, mb-3) */}
       <div
-        className={`flex justify-center items-center gap-1
-        text-semibold-16 my-auto ${accentClass}`}
+        className={`flex justify-end items-center gap-1
+        text-semibold-16 mt-auto mb-3 ${accentClass}`}
       >
         <Icon icon="ph:clock-bold" className="translate-y-[1px]" />
         <span>{time}</span>

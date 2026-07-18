@@ -6,7 +6,7 @@ import { RecommendMatchItem } from '@/pages/home/components/RecommendMatchItem';
 
 import sooWatermark from '@/assets/images/soo-watermark.png';
 
-const HOME_STATE: 'empty' | 'active' | 'alert' = 'empty'; // 현재 홈 화면 상태를 나타내는 상수 (empty, active, alert)
+const HOME_STATE: 'empty' | 'active' | 'alert' = 'active'; // 현재 홈 화면 상태를 나타내는 상수 (empty, active, alert)
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
