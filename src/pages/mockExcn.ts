@@ -9,7 +9,8 @@ export type ExchangeStatus =
   | 'RESULT_SELECT'
   | 'DISPUTE'
   | 'DISPUTE_SUBMITTED'
-  | 'COMPLETED';
+  | 'COMPLETED'
+  | 'TERMINATED';
 
 interface ExchangeState {
   status: ExchangeStatus;

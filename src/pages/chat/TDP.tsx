@@ -8,6 +8,7 @@ import Button from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import { ICONS } from '@/constants/icons';
+import { mockExchangeStore } from '../mockExcn';
 
 const HEADER_H = 80;
 
@@ -79,6 +80,27 @@ export default function TerminateDealPage() {
     // TODO: 실제로는 2번 API(거래 파기) 호출
     // reason: selectedGroupKey를 서버 enum(MUTUAL|FRAUD|MONEY_DEMAND|ABUSE|OTHER)에 맞게 매핑
     // detail: selectedGroupKey === 'OTHER' ? otherDetail : selectedSubReason
+    //
+    // 💡 실제 API 연동 로직 - 백엔드 거래 파기 API 붙으면 아래 주석 블록 해제
+    /*
+    const reason = selectedGroupKey;
+    const detail =
+      selectedGroupKey === 'OTHER' ? otherDetail : selectedSubReason;
+    const res = await fetch(`${API_BASE}/api/exchange/${roomId}/terminate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason, detail }),
+      credentials: 'include',
+    });
+    if (!res.ok) {
+      // TODO: 실패 시 에러 토스트/모달 처리
+      return;
+    }
+    */
+
+    // 💡 목업: 파기 상태로 전환 → ChatRoomPage에서 이 status를 보고
+    // 안내 문구 노출 + 입력창 잠금 처리를 한다.
+    mockExchangeStore.setStatus(roomId, 'TERMINATED');
     navigate(`/chat/${roomId}`);
   };
 

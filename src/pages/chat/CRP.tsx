@@ -74,6 +74,11 @@ const formatScheduledDate = (iso: string) => {
 // 무관하게 항상 기본으로 노출되어야 한다. (COUNTDOWN도 예외 아님 -
 // 다만 카운트다운 중에는 Modal 오버레이가 위에 뜨면서 헤더/푸터는
 // "보이기만" 하고 기능은 동작하지 않아도 된다.)
+//
+// ⚠️ 단, 채팅 입력(푸터)은 VERIFY(5분 전 인증)가 시작된 순간부터 완전히 잠긴다.
+// VERIFY -> COUNTDOWN -> DISPUTE 로 이어지는 동안 계속 잠금 상태이며,
+// CHAT/GUIDE 단계에서만 입력창이 노출된다.
+// ⚠️ 거래가 파기(TERMINATED)된 경우에도 flowStep과 무관하게 입력창은 잠긴다.
 type FlowStep = 'CHAT' | 'GUIDE' | 'VERIFY' | 'COUNTDOWN' | 'DISPUTE';
 type VerifySubStep =
   | 'INTRO'
@@ -84,6 +89,9 @@ type VerifySubStep =
 type CountdownPhase = 'COUNTING' | 'RESULT_SELECT';
 // DISPUTE 화면 내부 단계 - CAPTURE: 인증 시작 카드, SUBMITTED: 인증 제출 완료 카드
 type DisputeSubStep = 'CAPTURE' | 'SUBMITTED';
+
+// 채팅 입력창(푸터)이 노출되는 flowStep 목록. VERIFY부터는 잠금.
+const CHAT_INPUT_UNLOCKED_STEPS: FlowStep[] = ['CHAT', 'GUIDE'];
 
 const GUIDE_STEPS = [
   {
@@ -182,6 +190,14 @@ export default function ChatRoomPage() {
   const [isDisputeSubmitting, setIsDisputeSubmitting] = useState(false);
   const [disputeStep, setDisputeStep] = useState<DisputeSubStep>('CAPTURE');
 
+  // ----- 거래 파기/원상복구 관련 state -----
+  // 파기 직전의 exchange.status를 기억해뒀다가, 원상복구 시 그 상태로 되돌리기 위함.
+  // (예: READY 상태에서 파기했다면 원상복구 시 다시 READY로 복귀)
+  const statusBeforeTerminateRef = useRef<typeof exchange.status | null>(null);
+  const prevExchangeStatusRef = useRef(exchange.status);
+  const [isRestoring, setIsRestoring] = useState(false);
+  void setIsRestoring; // 연동하면 지우기
+
   // 교환 시간이 방금 확정된 시점(false -> true 전환)의 메시지 개수를 기록해
   // "확정 카드" 위/아래로 메시지를 나눠 보여줄 수 있게 한다.
   useEffect(() => {
@@ -190,6 +206,23 @@ export default function ChatRoomPage() {
     }
     prevScheduledAtRef.current = scheduledAt;
   }, [scheduledAt]);
+
+  // exchange.status가 TERMINATED로 "막 바뀐 시점"의 이전 상태를 기억해둔다.
+  // /chat/:roomId/terminate 페이지에서 사유를 골라 파기를 확정하면
+  // mockExchangeStore.setStatus(roomId, 'TERMINATED')가 호출되고,
+  // 그 결과 exchange.status가 바뀌면서 이 effect가 이전 상태를 저장한다.
+  // TODO: 실제 API 연동 시에는 서버가 파기 이전 status를 함께 내려주거나,
+  //       "원상복구" 시 서버가 알아서 이전 상태로 되돌려주는 API를 호출하면 되므로
+  //       이 ref 로직 자체는 제거하고 서버 응답값을 그대로 반영하면 된다.
+  useEffect(() => {
+    if (
+      exchange.status === 'TERMINATED' &&
+      prevExchangeStatusRef.current !== 'TERMINATED'
+    ) {
+      statusBeforeTerminateRef.current = prevExchangeStatusRef.current;
+    }
+    prevExchangeStatusRef.current = exchange.status;
+  }, [exchange.status]);
 
   // 새 카드/메시지가 생기면 맨 아래로 자동 스크롤한다.
   // 단, GUIDE(강의 보유 인증 안내)로 "막 진입"한 순간에는 안내문을 위에서부터
@@ -252,9 +285,56 @@ export default function ChatRoomPage() {
     navigate(`/chat/${roomId}/schedule`);
   };
 
-  const handleTerminateDeal = () => {
+  // 거래 파기 페이지로 이동. 실제 파기 확정(사유 선택 후 제출)은
+  // /chat/:roomId/terminate 페이지에서 이루어지고, 그 페이지가
+  // mockExchangeStore.setStatus(roomId, 'TERMINATED')를 호출한다.
+  // TODO: 실제 API 연동 시 terminate 페이지에서
+  //   await fetch(`${API_BASE}/api/exchange/${roomId}/terminate`, {
+  //     method: 'POST',
+  //     body: JSON.stringify({ reason }),
+  //     credentials: 'include',
+  //   });
+  //   성공 응답을 받은 뒤 status를 TERMINATED로 반영하도록 구현하면 된다.
+  const handleGoTerminate = () => {
     setIsMenuOpen(false);
     navigate(`/chat/${roomId}/terminate`);
+  };
+
+  // 거래 파기 상태를 원상복구(취소)한다.
+  // 채팅방을 나가지 않고, 파기 이전 상태로 되돌려 마치 파기가 없었던 것처럼 만든다.
+  const handleRestoreDeal = async () => {
+    setIsMenuOpen(false);
+
+    // 💡 실제 API 연동 로직 - 백엔드 원상복구 API 붙으면 아래 주석 블록 해제
+    /*
+    setIsRestoring(true);
+    try {
+      const res = await fetch(
+        `${API_BASE}/api/exchange/${roomId}/terminate/restore`,
+        {
+          method: 'POST',
+          credentials: 'include',
+        },
+      );
+      if (!res.ok) throw new Error('원상복구에 실패했습니다.');
+      const data = await res.json();
+      // 서버가 내려주는 복구된 status를 그대로 반영
+      mockExchangeStore.setStatus(roomId, data.data.status);
+    } catch (err) {
+      // TODO: 실패 시 에러 토스트/모달 처리
+      console.error(err);
+    } finally {
+      setIsRestoring(false);
+    }
+    return;
+    */
+
+    // 💡 목업: 파기 직전에 기억해둔 상태로 되돌린다. (없으면 기본값 READY)
+    mockExchangeStore.setStatus(
+      roomId,
+      statusBeforeTerminateRef.current ?? 'READY',
+    );
+    statusBeforeTerminateRef.current = null;
   };
 
   const handleReport = () => {
@@ -513,6 +593,8 @@ export default function ChatRoomPage() {
     setFlowStep('CHAT');
   };
 
+  const isTerminated = exchange.status === 'TERMINATED';
+
   return (
     <div className="relative bg-[#fbfbfb] mx-auto overflow-hidden h-full flex flex-col">
       {/* ============ 헤더 (모든 flowStep 공통 디폴트) ============ */}
@@ -558,11 +640,16 @@ export default function ChatRoomPage() {
           <div className="absolute top-[84px] right-4 z-40 w-56 bg-white rounded-xl border border-gray-100 py-2">
             <button
               type="button"
-              onClick={handleTerminateDeal}
-              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
+              onClick={isTerminated ? handleRestoreDeal : handleGoTerminate}
+              disabled={isRestoring}
+              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
             >
               <Icon icon="mdi:alert-circle-outline" className="text-[18px]" />
-              거래 파기하기/원상복구하기
+              {isTerminated
+                ? isRestoring
+                  ? '원상복구 중...'
+                  : '원상복구하기'
+                : '거래 파기하기'}
             </button>
             <button
               type="button"
@@ -613,6 +700,20 @@ export default function ChatRoomPage() {
           {renderScheduledBox()}
 
           {renderMessages(messages.slice(scheduleInsertIndex))}
+
+          {/* 거래 파기 안내 텍스트 - 버튼 없이 텍스트만 노출 */}
+          {isTerminated && (
+            <div className="mx-4 mt-4 flex flex-col items-center gap-2 text-center">
+              <p className="text-sm font-bold text-gray-700">
+                거래가 파기되었습니다
+              </p>
+              <p className="text-xs text-gray-500 leading-relaxed">
+                파기 사유는 관리자에게 전달되었습니다
+                <br />
+                검토 후 귀책 여부에 따라 페널티가 부여됩니다
+              </p>
+            </div>
+          )}
 
           {/* 개발용: 발신자 전환 + 단계 바로가기 - 실배포 전 삭제 */}
           <div className="flex flex-wrap justify-end gap-1.5 pt-2">
@@ -1248,25 +1349,28 @@ export default function ChatRoomPage() {
         </Modal>
       )}
 
-      {/* ============ 푸터 (모든 flowStep 공통 디폴트) ============ */}
-      {/* 헤더와 동일하게 flowStep과 무관하게 항상 렌더링된다.
-          COUNTDOWN 단계에서는 위에 Modal 오버레이가 덮이므로 "보이기만" 하는 상태가 된다. */}
-      <div className="px-6 py-3 bg-[#fbfbfb]">
-        <Input
-          variant="pill"
-          placeholder="메세지 보내기"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onCompositionStart={() => (isComposingRef.current = true)}
-          onCompositionEnd={() => (isComposingRef.current = false)}
-          onKeyDown={handleKeyDown}
-          rightNode={
-            <button type="button" onClick={handleSend} aria-label="전송">
-              {<img src={sendIcon} alt="" className="w-7 h-7" />}
-            </button>
-          }
-        />
-      </div>
+      {/* ============ 푸터 (CHAT/GUIDE 단계에서만 노출) ============ */}
+      {/* VERIFY(5분 전 인증)가 시작된 순간부터 채팅이 완전히 잠긴다.
+          COUNTDOWN, DISPUTE 단계에서도 계속 잠금 상태를 유지한다.
+          거래가 파기(TERMINATED)된 경우에도 flowStep과 무관하게 잠긴다. */}
+      {CHAT_INPUT_UNLOCKED_STEPS.includes(flowStep) && !isTerminated && (
+        <div className="px-6 py-3 bg-[#fbfbfb]">
+          <Input
+            variant="pill"
+            placeholder="메세지 보내기"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onCompositionStart={() => (isComposingRef.current = true)}
+            onCompositionEnd={() => (isComposingRef.current = false)}
+            onKeyDown={handleKeyDown}
+            rightNode={
+              <button type="button" onClick={handleSend} aria-label="전송">
+                {<img src={sendIcon} alt="" className="w-7 h-7" />}
+              </button>
+            }
+          />
+        </div>
+      )}
     </div>
   );
 }
