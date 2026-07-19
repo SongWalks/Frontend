@@ -20,6 +20,10 @@ import LoginPage from '../pages/login/login';
 import SignupPage from '../pages/signup';
 import FindPWPage from '../pages/findPW';
 import AlertPage from '../pages/alert';
+import EPRPage from '../pages/epr';
+import CRPPage from '../pages/chat/crp';
+import SDPPage from '../pages/chat/sdp';
+import TDPPage from '../pages/chat/tdp';
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +46,7 @@ export const router = createBrowserRouter([
           { path: '/test-avatar', element: <TestAvatar /> },
           { path: '/test-loading', element: <TestLoading /> },
           { path: '/alert', element: <AlertPage /> },
+          { path: '/chat', element: <EPRPage /> },
         ],
       },
       {
@@ -55,6 +60,9 @@ export const router = createBrowserRouter([
           { path: '/login', element: <LoginPage /> },
           { path: '/signup', element: <SignupPage /> },
           { path: '/findPW', element: <FindPWPage /> },
+          { path: '/chat/:roomId', element: <CRPPage /> },
+          { path: '/chat/:roomId/schedule', element: <SDPPage /> },
+          { path: '/chat/:roomId/terminate', element: <TDPPage /> },
         ],
       },
     ],
