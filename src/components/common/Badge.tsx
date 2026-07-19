@@ -13,7 +13,6 @@ interface BadgeProps {
   className?: string; // 추가적인 여백(ml-2) 등을 줄 때 사용
 }
 
-// 💡 5가지 디자인 시안 컬러 매핑
 const badgeVariants = {
   primary: 'bg-brand-lightBlue text-white', // 파란 바탕 + 흰 글씨 (제안, 강의꿀팁)
   secondary: 'bg-gray-100 text-gray-700', // 회색 바탕 + 진회색 글씨 (데이터베이스)
