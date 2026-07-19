@@ -558,14 +558,6 @@ export default function ChatRoomPage() {
           <div className="absolute top-[84px] right-4 z-40 w-56 bg-white rounded-xl border border-gray-100 py-2">
             <button
               type="button"
-              onClick={handleGoSchedule}
-              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
-            >
-              <Icon icon="mdi:clock-outline" className="text-[18px]" />
-              교환시간 결정하기
-            </button>
-            <button
-              type="button"
               onClick={handleTerminateDeal}
               className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50"
             >
