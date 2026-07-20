@@ -10,8 +10,6 @@ import { Modal } from '@/components/common/Modal';
 import { ICONS } from '@/constants/icons';
 import { mockExchangeStore } from '../mockExcn';
 
-const HEADER_H = 80;
-
 interface ReasonGroup {
   key: string;
   label: string;
@@ -106,10 +104,7 @@ export default function TerminateDealPage() {
 
   return (
     <div className="relative bg-white mx-auto overflow-hidden font-['Pretendard'] h-full flex flex-col">
-      <div
-        style={{ '--header-h': `${HEADER_H}px` } as React.CSSProperties}
-        className="[&>header]:!h-[var(--header-h)] sticky top-0 z-20 bg-white"
-      >
+      <div>
         <Header
           leftNode={
             <div style={{ opacity: 0.6 }} className="z-10">

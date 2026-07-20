@@ -13,7 +13,6 @@ import { mockExchangeStore, useExchangeState } from '../mockExcn';
 import sendIcon from '@/assets/icons/send.svg';
 import disputeIcon from '@/assets/icons/dispute.svg';
 
-const HEADER_H = 80;
 const CURRENT_USER_ID = 1; // TODO: 실제 로그인 유저 id로 교체
 const COUNTERPART_ID = 2;
 
@@ -598,10 +597,7 @@ export default function ChatRoomPage() {
   return (
     <div className="relative bg-[#fbfbfb] mx-auto overflow-hidden h-full flex flex-col">
       {/* ============ 헤더 (모든 flowStep 공통 디폴트) ============ */}
-      <div
-        style={{ '--header-h': `${HEADER_H}px` } as React.CSSProperties}
-        className="[&>header]:!h-[var(--header-h)] sticky top-0 z-20 bg-[#fbfbfb]"
-      >
+      <div>
         <Header
           leftNode={
             <div className="flex items-center gap-1">

@@ -9,8 +9,6 @@ import { Modal } from '@/components/common/Modal';
 import { ICONS } from '@/constants/icons';
 import { mockScheduleStore } from '../mockChat';
 
-const HEADER_H = 80;
-
 // TODO: 실제로는 수강신청 가능 날짜/시간 범위 API로 대체
 const DATE_OPTIONS = [
   '2026년 6월 05일 화요일',
@@ -69,10 +67,7 @@ export default function ScheduleDecisionPage() {
         인증 mock: {isMockVerified ? '성공' : '실패'}
       </button>
 
-      <div
-        style={{ '--header-h': `${HEADER_H}px` } as React.CSSProperties}
-        className="[&>header]:!h-[var(--header-h)] sticky top-0 z-20 bg-[#fbfbfb]"
-      >
+      <div>
         <Header
           leftNode={
             <div

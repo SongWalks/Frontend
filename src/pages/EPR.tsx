@@ -5,8 +5,6 @@ import { IconButton } from '@/components/common/IconButton';
 import { ICONS } from '@/constants/icons';
 import clockIcon from '@/assets/icons/clock.svg';
 
-const HEADER_H = 80;
-
 interface ExchangeRoom {
   id: number;
   myCourseName: string;
@@ -66,10 +64,7 @@ export default function ExchangeRoomListPage() {
 
   return (
     <div className="relative bg-[#fbfbfb] mx-auto overflow-hidden font-['Pretendard'] h-full flex flex-col">
-      <div
-        style={{ '--header-h': `${HEADER_H}px` } as React.CSSProperties}
-        className="[&>header]:!h-[var(--header-h)] sticky top-0 z-20 bg-[#fbfbfb]"
-      >
+      <div>
         <Header
           leftNode={
             <div

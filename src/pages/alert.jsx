@@ -22,7 +22,6 @@ const API = {
   READ_ALL: `${API_BASE}/api/notifications/read-all`,
 };
 
-const HEADER_H = 80;
 const PAGE_SIZE = 20;
 
 const USE_MOCK = true;
@@ -249,7 +248,6 @@ export default function AlertPage() {
     <div className="relative bg-[#fbfbfb] mx-auto overflow-hidden font-['Pretendard'] h-full flex flex-col">
       <div className="sticky top-0 z-20 bg-[#fbfbfb]">
         <Header
-          height={HEADER_H}
           leftNode={
             <div
               style={{
