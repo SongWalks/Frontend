@@ -1,4 +1,4 @@
-// src/lib/push.js
+// src/api/push.js
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY ?? '';
 // 👆 VAPID 공개키는 백엔드가 발급해줘야 해요. .env에 VITE_VAPID_PUBLIC_KEY=... 로 넣어두세요.

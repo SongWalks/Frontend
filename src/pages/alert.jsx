@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import { IconButton } from '@/components/common/IconButton';
@@ -23,6 +23,7 @@ const API = {
 };
 
 const HEADER_H = 80;
+const PAGE_SIZE = 20;
 
 const USE_MOCK = true;
 
@@ -67,7 +68,7 @@ const MOCK_NOTIFICATIONS = [
     id: 5,
     type: 'EXCHANGE_SCHEDULED',
     title: '매칭 시간 확정',
-    body: '오후 2시 15분으로 교환 시간이 확정되었습니다.\n해당 시간에 카카오톡 오픈채팅방 링크가 열립니다.',
+    body: '오후 2시 15분으로 교환 시간이 확정되었습니다.\n교환 5분 전 과목 보유 인증이 진행됩니다. 약속 시간을 꼭 지켜주세요.',
     deepLink: null,
     isRead: true,
     createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
@@ -94,6 +95,7 @@ const TYPE_ICON_MAP = {
 const TOAST_BY_TYPE = {
   EXPIRED_POST: '존재하지 않거나 삭제된 게시글입니다.',
   EXPIRED_MATCH: '만료된 매칭 제안입니다.',
+  LOAD_FAILED: '알림을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.',
 };
 
 const formatRelativeTime = (iso) => {
@@ -122,11 +124,16 @@ export default function AlertPage() {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [toastMessage, setToastMessage] = useState('');
   const [isToastVisible, setIsToastVisible] = useState(false);
 
+  const pageRef = useRef(0);
+  const listRef = useRef(null);
+
   useEffect(() => {
-    fetchNotifications();
+    fetchNotifications({ reset: true });
   }, []);
 
   const showToast = (message) => {
@@ -134,20 +141,52 @@ export default function AlertPage() {
     setIsToastVisible(true);
   };
 
-  const fetchNotifications = async () => {
-    setIsLoading(true);
+  // page: 알림 목록 조회 (page/size 파라미터로 페이지네이션)
+  const fetchNotifications = async ({ reset = false } = {}) => {
+    const page = reset ? 0 : pageRef.current;
+
+    if (reset) {
+      setIsLoading(true);
+    } else {
+      setIsLoadingMore(true);
+    }
+
     try {
       if (USE_MOCK) {
         await new Promise((r) => setTimeout(r, 300));
         setNotifications(MOCK_NOTIFICATIONS);
+        setHasMore(false);
         return;
       }
-      const { data } = await getJson(`${API.LIST}?page=0&size=20`);
-      if (data?.success) {
-        setNotifications(data.data.notifications);
+
+      const { status, data } = await getJson(
+        `${API.LIST}?page=${page}&size=${PAGE_SIZE}`,
+      );
+
+      if (status === 200 && data?.success) {
+        const fetched = data.data.notifications ?? [];
+        setNotifications((prev) => (reset ? fetched : [...prev, ...fetched]));
+        setHasMore(fetched.length === PAGE_SIZE);
+        pageRef.current = page + 1;
+      } else {
+        showToast(TOAST_BY_TYPE.LOAD_FAILED);
       }
+    } catch {
+      showToast(TOAST_BY_TYPE.LOAD_FAILED);
     } finally {
       setIsLoading(false);
+      setIsLoadingMore(false);
+    }
+  };
+
+  // 리스트를 끝까지 스크롤하면 다음 페이지 로드 (기존 "불러오는 중..." 표시를 그대로 재사용)
+  const handleScroll = () => {
+    if (USE_MOCK || isLoading || isLoadingMore || !hasMore) return;
+    const el = listRef.current;
+    if (!el) return;
+    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 80;
+    if (nearBottom) {
+      fetchNotifications({ reset: false });
     }
   };
 
@@ -155,18 +194,28 @@ export default function AlertPage() {
 
   const handleNotificationClick = async (item) => {
     if (!item.isRead) {
-      try {
-        await patchJson(API.READ_ONE(item.id));
+      if (USE_MOCK) {
         setNotifications((prev) =>
           prev.map((n) => (n.id === item.id ? { ...n, isRead: true } : n)),
         );
-      } catch {
-        // 읽음 처리 실패는 조용히 무시
+      } else {
+        try {
+          const { status } = await patchJson(API.READ_ONE(item.id));
+          if (status === 200) {
+            setNotifications((prev) =>
+              prev.map((n) => (n.id === item.id ? { ...n, isRead: true } : n)),
+            );
+          }
+        } catch {
+          // 읽음 처리 실패는 조용히 무시 (다음 진입 시 재시도됨)
+        }
       }
     }
 
     if (!item.deepLink) return;
 
+    // 3번 API(알림 목록 조회) 명세에 정의된 두 케이스만 만료/삭제로 취급한다.
+    // 그 외 네트워크 오류 등은 "삭제됨"으로 단정할 근거가 없으므로 일단 이동시킨다.
     try {
       const res = await fetch(item.deepLink, { credentials: 'include' });
       if (res.status === 404) {
@@ -179,7 +228,7 @@ export default function AlertPage() {
       }
       navigate(item.deepLink);
     } catch {
-      showToast(TOAST_BY_TYPE.EXPIRED_POST);
+      navigate(item.deepLink);
     }
   };
 
@@ -243,7 +292,11 @@ export default function AlertPage() {
         🔔
       </button>
 
-      <div className="flex flex-col overflow-y-auto flex-1 min-h-0 bg-[#fbfbfb]">
+      <div
+        ref={listRef}
+        onScroll={handleScroll}
+        className="flex flex-col overflow-y-auto flex-1 min-h-0 bg-[#fbfbfb]"
+      >
         {isLoading && (
           <div className="flex justify-center items-center py-10 text-gray-400 text-sm">
             불러오는 중...
@@ -295,6 +348,12 @@ export default function AlertPage() {
             </button>
           );
         })}
+
+        {!isLoading && isLoadingMore && (
+          <div className="flex justify-center items-center py-10 text-gray-400 text-sm">
+            불러오는 중...
+          </div>
+        )}
       </div>
 
       <Toast

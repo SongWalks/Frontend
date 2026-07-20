@@ -16,7 +16,7 @@ import { TestCard } from '../pages/TestCard';
 import { TestExtra } from '../pages/TestExtra';
 import { TestAvatar } from '../pages/TestAvatar';
 import { TestLoading } from '../pages/TestLoading';
-import LoginPage from '../pages/login/login';
+import LoginPage from '../pages/login';
 import SignupPage from '../pages/signup';
 import FindPWPage from '../pages/findPW';
 import AlertPage from '../pages/alert';
