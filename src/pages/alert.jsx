@@ -247,11 +247,9 @@ export default function AlertPage() {
 
   return (
     <div className="relative bg-[#fbfbfb] mx-auto overflow-hidden font-['Pretendard'] h-full flex flex-col">
-      <div
-        style={{ '--header-h': `${HEADER_H}px` }}
-        className="[&>header]:!h-[var(--header-h)] sticky top-0 z-20 bg-[#fbfbfb]"
-      >
+      <div className="sticky top-0 z-20 bg-[#fbfbfb]">
         <Header
+          height={HEADER_H}
           leftNode={
             <div
               style={{
