@@ -46,7 +46,7 @@ export const LoungeWritePage = () => {
                   : 'border-gray-300 text-gray-400 bg-white'
               }`}
             >
-              강의 꿀팁
+              강의꿀팁
             </button>
             <button
               onClick={() => setPostType('폐강과목')}
@@ -56,14 +56,14 @@ export const LoungeWritePage = () => {
                   : 'border-gray-300 text-gray-400 bg-white'
               }`}
             >
-              폐강 과목
+              폐강과목
             </button>
           </div>
         </section>
 
         {/* 섹션 2: 과목 태그 (점선 박스) */}
         <section className="space-y-3">
-          <h3 className="text-[#3E8EEA] font-bold text-[15px]">과목 태그</h3>
+          <h3 className="text-brand-lightBlue text-bold-16">과목 태그</h3>
           <button
             // 💡 나중에 이 버튼을 누르면 검색 모달을 띄우고, 모달에서 선택한 값을 setCourseTag에 넣어주시면 됩니다!
             onClick={() => {
@@ -102,7 +102,7 @@ export const LoungeWritePage = () => {
       </div>
 
       {/* 3. 하단 고정 버튼 영역 */}
-      <div className="shrink-0 px-4 py-4 space-y-2 bg-white pb-safe">
+      <div className="shrink-0 px-4 py-4 space-y-2 pb-safe">
         <Button
           variant="primary"
           // 💡 4가지 조건(유형, 태그, 제목, 내용)이 모두 충족되지 않으면 비활성화

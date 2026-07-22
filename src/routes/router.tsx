@@ -20,6 +20,7 @@ import { LoungePage } from '@/pages/lounge/LoungePage';
 import { PostDetailPage } from '@/pages/lounge/PostDetailPage';
 import { LoungeWritePage } from '@/pages/lounge/LoungeWritePage';
 import { LoungeFilterPage } from '@/pages/lounge/LoungeFilterPage';
+import { PostEditPage } from '@/pages/lounge/PostEditPage';
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,7 @@ export const router = createBrowserRouter([
           { path: '/post/:id', element: <PostDetailPage /> },
           { path: '/lounge/write', element: <LoungeWritePage /> },
           { path: '/lounge/filter', element: <LoungeFilterPage /> },
+          { path: '/lounge/:postId/edit', element: <PostEditPage /> },
         ],
       },
     ],

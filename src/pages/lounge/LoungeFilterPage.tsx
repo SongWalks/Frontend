@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { Tabs } from '@/components/common/Tabs';
 import { Badge } from '@/components/common/Badge';
 import { Input } from '@/components/common/Input';
 import { CourseCard } from '@/components/common/CourseCard';
@@ -54,7 +53,7 @@ const MOCK_COURSES = [
 
 export const LoungeFilterPage = () => {
   const navigate = useNavigate();
-  const { activeTab, setActiveTab, searchQuery, setSearchQuery } = useLounge();
+  const { searchQuery, setSearchQuery } = useLounge();
 
   const [lectureType, setLectureType] = useState('all');
   const [department, setDepartment] = useState('all');
@@ -63,7 +62,7 @@ export const LoungeFilterPage = () => {
     <div className="absolute top-0 left-0 w-full h-full flex flex-col overflow-hidden bg-white">
       {/* 1. 검색창 헤더 */}
       <div className="shrink-0 w-full z-20">
-        <div className="flex items-center px-4 h-[60px] gap-2">
+        <div className="flex items-center px-4 h-[80px] gap-2">
           <IconButton
             icon={ICONS.BACK}
             onClick={() => navigate(-1)}
@@ -86,20 +85,7 @@ export const LoungeFilterPage = () => {
         </div>
       </div>
 
-      {/* 2. 상단 TABS 영역 */}
-      <div className="px-4 shrink-0 z-20 border-b border-gray-100">
-        <Tabs
-          variant="line"
-          activeTabId={activeTab}
-          onTabChange={setActiveTab}
-          tabs={[
-            { id: 'target', label: '내 타겟 과목' },
-            { id: 'drop', label: '내 버릴 과목' },
-          ]}
-        />
-      </div>
-
-      {/* 3. 콘텐츠 영역 */}
+      {/* 2. 콘텐츠 영역 */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden relative pb-[80px]">
         {/* 필터 컨트롤 박스 */}
         <div className="px-4 py-5 border-b border-gray-100">
@@ -156,7 +142,7 @@ export const LoungeFilterPage = () => {
         </div>
       </div>
 
-      {/* 4. 하단 고정 배너 */}
+      {/* 3. 하단 고정 배너 */}
       <div className="absolute bottom-0 left-0 w-full h-[60px] bg-brand-soft flex items-center justify-center z-50">
         <p className="text-brand-navy text-[15px] font-medium tracking-tight">
           졸업 요건에 해당하는 과목이 상단에 표시됩니다
