@@ -11,7 +11,7 @@ export const IconButton = ({
   icon,
   onClick,
   className = '',
-  variant = 'default', // 💡 2. 파라미터로 받고 기본값을 'default'로 설정
+  variant = 'default',
 }: IconButtonProps) => {
   return (
     <button
