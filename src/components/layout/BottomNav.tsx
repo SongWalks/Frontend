@@ -5,8 +5,6 @@ export default function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 💡 메뉴 데이터 배열 (주소와 아이콘 매핑)
-  // 아이콘은 시안과 가장 유사한 ph(Phosphor) 및 mdi 계열로 임시 세팅했습니다.
   const navItems = [
     { id: 'home', label: '홈', path: '/', icon: 'ph:house-fill' },
     {
