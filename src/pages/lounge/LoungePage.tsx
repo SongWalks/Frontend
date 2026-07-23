@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { FAB } from '@/components/common/FAB';
 import { Tabs } from '@/components/common/Tabs';
@@ -8,13 +9,15 @@ import Header from '@/components/layout/Header';
 import { Input } from '@/components/common/Input';
 import { CourseCard } from '@/components/common/CourseCard';
 import { FilterChip } from '@/components/common/FilterChip';
-import { useLounge } from './useLounge';
+import { useLounge } from '../../store/useLounge';
 import { ICONS } from '@/constants/icons';
 import { IconButton } from '@/components/common/IconButton';
+import { useWriteStore } from '@/store/useWriteStore';
 
 export const LoungePage = () => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const resetWriteData = useWriteStore((state) => state.resetWriteData);
   const {
     activeTab,
     setActiveTab,
@@ -22,12 +25,27 @@ export const LoungePage = () => {
     setSearchQuery,
     selectedType,
     selectedCourses,
+    handleAddCourse,
     hasActiveFilters,
     filteredPosts,
     handleResetFilters,
     handleRemoveCourse,
     handleToggleType,
   } = useLounge();
+
+  // ✅ 필터 페이지에서 선택한 과목을 들고 돌아왔을 때 실행되는 로직
+  useEffect(() => {
+    if (location.state?.newCourse) {
+      const courseToAdd = location.state.newCourse;
+
+      // 💡 스토어에 이미 만들어둔 '과목 추가 함수'를 호출하기만 하면 끝!
+      // (내부에서 알아서 중복 검사를 진행합니다)
+      handleAddCourse(courseToAdd);
+
+      // 새로고침 시 다시 추가되는 것을 막기 위해 location.state 초기화
+      navigate('/lounge', { replace: true, state: {} });
+    }
+  }, [location.state, navigate, handleAddCourse]);
 
   return (
     <div className="absolute top-0 left-0 w-full h-full flex flex-col overflow-hidden">
@@ -63,17 +81,26 @@ export const LoungePage = () => {
       {/* 3. 콘텐츠 영역 (스크롤) */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden relative pb-24">
         {/* 일반 라운지 모드 컨트롤 */}
-        <div className="px-4 py-4 space-y-3">
-          <Input
-            variant="pill"
-            placeholder="검색어를 입력해주세요"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            rightNode={
-              <Icon icon={ICONS.SEARCH} className="text-[20px] text-gray-400" />
-            }
-          />
+        <div className="py-4 space-y-3">
+          <div className="px-4">
+            <Input
+              variant="pill"
+              placeholder="검색어를 입력해주세요"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              rightNode={
+                <Icon
+                  icon={ICONS.SEARCH}
+                  className="text-[20px] text-gray-400"
+                />
+              }
+            />
+          </div>
+
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide py-1">
+            {/* 화면 왼쪽 끝 여백 */}
+            <div className="w-4 shrink-0" />
+
             {hasActiveFilters && (
               <button
                 onClick={handleResetFilters}
@@ -101,14 +128,19 @@ export const LoungePage = () => {
                 onClose={() => handleRemoveCourse(course)}
               />
             ))}
-            {/* 💡 필터 페이지로 이동 */}
+
             <button
-              onClick={() => navigate('/lounge/filter')}
+              onClick={() =>
+                navigate('/lounge/filter', { state: { from: 'lounge' } })
+              }
               className="bg-brand-bg shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full border border-brand-lightBlue text-brand-lightBlue text-[14px] whitespace-nowrap"
             >
               과목 필터
               <Icon icon="ph:caret-down" className="text-[14px]" />
             </button>
+
+            {/* 화면 오른쪽 끝 여백 (이 녀석이 영어회화 칩이 잘리지 않게 지켜줄 겁니다!) */}
+            <div className="w-4 shrink-0" />
           </div>
         </div>
 
@@ -169,7 +201,13 @@ export const LoungePage = () => {
       </div>
 
       {/* FAB 버튼 */}
-      <FAB icon={ICONS.PLUS} onClick={() => navigate('/lounge/write')} />
+      <FAB
+        icon={ICONS.PLUS}
+        onClick={() => {
+          resetWriteData();
+          navigate('/lounge/write');
+        }}
+      />
     </div>
   );
 };

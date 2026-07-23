@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { Badge } from '@/components/common/Badge';
 import { Input } from '@/components/common/Input';
 import { CourseCard } from '@/components/common/CourseCard';
 import { Dropdown } from '@/components/common/Dropdown';
-import { useLounge } from './useLounge';
+import { useLounge } from '../../store/useLounge';
 import { ICONS } from '@/constants/icons';
 import { IconButton } from '@/components/common/IconButton';
+import { useWriteStore } from '@/store/useWriteStore';
 
 const TYPE_OPTIONS = [
   { value: 'all', label: '전체' },
@@ -53,6 +54,11 @@ const MOCK_COURSES = [
 
 export const LoungeFilterPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { setWriteData } = useWriteStore();
+
+  const from = location.state?.from;
+
   const { searchQuery, setSearchQuery } = useLounge();
 
   const [lectureType, setLectureType] = useState('all');
@@ -84,7 +90,6 @@ export const LoungeFilterPage = () => {
           </div>
         </div>
       </div>
-
       {/* 2. 콘텐츠 영역 */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden relative pb-[80px]">
         {/* 필터 컨트롤 박스 */}
@@ -124,6 +129,17 @@ export const LoungeFilterPage = () => {
           {MOCK_COURSES.map((course) => (
             <CourseCard
               key={course.id}
+              className="cursor-pointer transition-transform active:scale-[0.98] shadow-sm"
+              onClick={() => {
+                if (from === 'lounge') {
+                  // ✅ 1. 라운지에서 온 경우: 선택한 과목 이름(title)을 들고 라운지로 돌아감
+                  navigate('/lounge', { state: { newCourse: course.title } });
+                } else {
+                  // ✅ 2. 글쓰기에서 온 경우: 스토어에 과목 전체 객체를 저장하고 뒤로 감
+                  setWriteData({ courseTag: course });
+                  navigate(-1);
+                }
+              }}
               title={course.title}
               professor={course.professor}
               time={course.time}
@@ -136,12 +152,10 @@ export const LoungeFilterPage = () => {
                   ))}
                 </>
               }
-              className="shadow-sm"
             />
           ))}
         </div>
       </div>
-
       {/* 3. 하단 고정 배너 */}
       <div className="absolute bottom-0 left-0 w-full h-[60px] bg-brand-soft flex items-center justify-center z-50">
         <p className="text-brand-navy text-[15px] font-medium tracking-tight">

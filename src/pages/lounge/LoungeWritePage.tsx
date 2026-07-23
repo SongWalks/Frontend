@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import Header from '@/components/layout/Header';
@@ -7,17 +6,26 @@ import { Input } from '@/components/common/Input';
 import { Textarea } from '@/components/common/Textarea';
 import { ICONS } from '@/constants/icons';
 import Button from '@/components/common/Button';
+import { useWriteStore } from '@/store/useWriteStore';
 
 export const LoungeWritePage = () => {
   const navigate = useNavigate();
 
   // 상태 관리
-  const [postType, setPostType] = useState<'강의꿀팁' | '폐강과목' | null>(
-    null,
-  );
-  const [courseTag, setCourseTag] = useState<string | null>(null); // 미래에 검색 모달에서 선택할 값
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const { postType, courseTag, title, content, setWriteData, resetWriteData } =
+    useWriteStore();
+
+  const handleSubmit = async () => {
+    try {
+      // TODO: 실제 서버에 데이터(title, content, postType, courseTag)를 전송하는 API 호출
+      // await api.postWrite({ title, content, postType, courseTag });
+
+      resetWriteData(); // 등록 성공했으니 스토어 초기화!
+      navigate('/lounge', { replace: true }); // 라운지 메인으로 이동
+    } catch (error) {
+      console.error('글 등록 실패:', error);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full relative">
@@ -39,7 +47,7 @@ export const LoungeWritePage = () => {
           <h3 className="text-brand-lightBlue text-bold-16">게시글 유형</h3>
           <div className="flex gap-3">
             <button
-              onClick={() => setPostType('강의꿀팁')}
+              onClick={() => setWriteData({ postType: '강의꿀팁' })}
               className={`flex-1 py-3 rounded-full border text-[14px] font-medium transition-colors ${
                 postType === '강의꿀팁'
                   ? 'border-brand-lightBlue text-brand-lightBlue bg-[#F3F7FC]'
@@ -49,7 +57,7 @@ export const LoungeWritePage = () => {
               강의꿀팁
             </button>
             <button
-              onClick={() => setPostType('폐강과목')}
+              onClick={() => setWriteData({ postType: '폐강과목' })}
               className={`flex-1 py-3 rounded-full border text-[14px] font-medium transition-colors ${
                 postType === '폐강과목'
                   ? 'border-brand-lightBlue text-brand-lightBlue bg-[#F3F7FC]'
@@ -61,21 +69,52 @@ export const LoungeWritePage = () => {
           </div>
         </section>
 
-        {/* 섹션 2: 과목 태그 (점선 박스) */}
+        {/* 섹션 2: 과목 태그 */}
         <section className="space-y-3">
           <h3 className="text-brand-lightBlue text-bold-16">과목 태그</h3>
-          <button
-            // 💡 나중에 이 버튼을 누르면 검색 모달을 띄우고, 모달에서 선택한 값을 setCourseTag에 넣어주시면 됩니다!
-            onClick={() => {
-              /* 검색 모달 오픈 로직 */
-            }}
-            className="w-full py-10 border-2 border-dashed border-gray-400 rounded-xl flex flex-col items-center justify-center gap-3 text-gray-600 bg-white hover:bg-gray-50 transition-colors"
-          >
-            <Icon icon="ph:magnifying-glass-light" className="text-[36px]" />
-            <span className="text-[15px] font-medium">
-              {courseTag ? courseTag : '과목 검색하기'}
-            </span>
-          </button>
+
+          {courseTag ? (
+            // ✅ 1. 과목이 선택되었을 때의 UI (image_e0cafe.png 참고)
+            <div className="relative w-full p-5 border border-gray-300 rounded-xl bg-brand-bg flex flex-col gap-2">
+              {/* X 버튼: 클릭 시 선택된 과목 초기화 */}
+              <button
+                onClick={() => setWriteData({ courseTag: null })}
+                className="absolute top-4 right-4 text-gray-400 p-1 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                <Icon icon="ph:x" className="text-[20px]" />
+              </button>
+
+              <div className="text-[16px] font-bold text-gray-800">
+                {courseTag.title}
+              </div>
+
+              <div className="text-[13px] text-gray-500 flex flex-col gap-0.5">
+                <span>교수 : {courseTag.professor}</span>
+                <span>시간 : {courseTag.time}</span>
+              </div>
+
+              {/* 과목 뱃지들 */}
+              <div className="flex gap-2 mt-2">
+                {courseTag.badges.map((badge, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 bg-[#E2F0F9] text-brand-lightBlue text-[12px] font-medium rounded-md"
+                  >
+                    {badge.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : (
+            // ✅ 2. 과목이 선택되지 않았을 때의 UI (기존 점선 박스)
+            <button
+              onClick={() => navigate('/lounge/filter')}
+              className="w-full py-10 border-2 border-dashed border-gray-400 rounded-xl flex flex-col items-center justify-center gap-3 text-gray-600 bg-white hover:bg-gray-50 transition-colors"
+            >
+              <Icon icon="ph:magnifying-glass-light" className="text-[36px]" />
+              <span className="text-[15px] font-medium">과목 검색하기</span>
+            </button>
+          )}
         </section>
 
         {/* 섹션 3: 제목 및 내용 입력 */}
@@ -87,14 +126,14 @@ export const LoungeWritePage = () => {
             <Input
               placeholder="제목을 입력해주세요."
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => setWriteData({ title: e.target.value })}
               className="!rounded-xl focus:!border-brand-lightBlue !py-3.5"
             />
             {/* 💡 커스텀 Textarea 컴포넌트 적용 */}
             <Textarea
               placeholder="자유롭게 선택 과목에 대한 이야기를 나누세요."
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => setWriteData({ content: e.target.value })}
               className="min-h-[180px] focus:!border-brand-lightBlue"
             />
           </div>
@@ -105,11 +144,22 @@ export const LoungeWritePage = () => {
       <div className="shrink-0 px-4 py-4 space-y-2 pb-safe">
         <Button
           variant="primary"
-          // 💡 4가지 조건(유형, 태그, 제목, 내용)이 모두 충족되지 않으면 비활성화
           disabled={!title || !content || !postType || !courseTag}
           className="disabled:!bg-gray-200 disabled:!text-gray-500"
-          onClick={() => {
-            /* 등록 API 호출 로직 */
+          onClick={async () => {
+            try {
+              // 1. 서버로 데이터 전송 (가상의 API 호출 함수 예시)
+              // await createPostAPI({ title, content, postType, courseTag });
+
+              // 2. 등록이 성공하면 스토어 초기화
+              resetWriteData();
+
+              // 3. 라운지 목록 페이지나 작성된 상세 글로 이동
+              navigate('/lounge');
+            } catch (error) {
+              // 에러가 났을 때는 초기화하지 않고 에러 메시지 띄우기
+              console.error('게시글 등록 실패', error);
+            }
           }}
         >
           등록하기
