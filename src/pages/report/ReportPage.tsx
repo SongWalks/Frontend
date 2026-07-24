@@ -1,13 +1,16 @@
 import { useState, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import { IconButton } from '@/components/common/IconButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ICONS } from '@/constants/icons';
 import Header from '@/components/layout/Header';
 import Button from '@/components/common/Button';
 
 export default function ReportPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const reportedUserId = location.state?.reportedUserId;
 
   const [selectedReason, setSelectedReason] = useState<string>('');
   const [otherReasonText, setOtherReasonText] = useState<string>('');
@@ -17,27 +20,27 @@ export default function ReportPage() {
 
   const REPORT_REASONS = [
     {
-      id: 'fake_photo',
+      id: 'FAKE_VERIFICATION', // fake_photo -> 변경
       title: '허위 인증 사진제출',
       desc: '다른 과목 또는 타인의 화면을 제출한 경우',
     },
     {
-      id: 'fake_subject',
+      id: 'FAKE_COURSE', // fake_subject -> 변경
       title: '허위 과목 등록 / 거래 불이행',
       desc: '실제로 보유하지 않은 과목을 등록하거나 교환을 이행하지 않은 경우',
     },
     {
-      id: 'money',
+      id: 'MONEY_DEMAND', // money -> 변경
       title: '금전 요구 또는 부당한 조건 변경',
       desc: '금전을 요구하거나 합의 없이 조건을 변경한 경우',
     },
     {
-      id: 'abuse',
+      id: 'ABUSE', // abuse -> 변경
       title: '욕설 및 비매너',
       desc: '욕설, 협박, 불쾌한 언행을 한 경우',
     },
     {
-      id: 'etc',
+      id: 'OTHER', // etc -> 변경
       title: '기타',
       desc: '',
     },
@@ -61,6 +64,52 @@ export default function ReportPage() {
 
   const handleRemoveImage = (indexToRemove: number) => {
     setImages((prev) => prev.filter((_, index) => index !== indexToRemove));
+  };
+
+  // 💡 [임시 함수] 이미지 업로드 API가 구현될 때까지 사용할 가짜 함수입니다.
+  // 1초 뒤에 파일 개수만큼 가짜 S3 URL을 배열로 반환합니다.
+  const mockUploadImages = async (files: File[]): Promise<string[]> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(
+          files.map(
+            (_, index) => `https://dummy-s3-bucket.com/temp_image_${index}.png`,
+          ),
+        );
+      }, 1000); // 1초 딜레이 (진짜 통신하는 것처럼 흉내)
+    });
+  };
+
+  // ✅ 제출 버튼 클릭 시 실행될 함수
+  const handleSubmit = async () => {
+    // 임시 피신고자 ID (나중에는 이전 페이지에서 넘겨받은 값을 사용하세요!)
+    const targetUserId = 123;
+
+    try {
+      // 1. 가짜 이미지 업로드 함수 호출해서 임시 URL 받아오기
+      const uploadedUrls = await mockUploadImages(images);
+
+      // 2. 백엔드(POST /api/reports)에 보낼 데이터 형태 맞추기
+      const requestBody = {
+        reportedUserId: targetUserId,
+        reason: selectedReason, // 주의: 이전 답변처럼 FAKE_VERIFICATION 등 대문자 키워드여야 합니다.
+        imageUrls: uploadedUrls,
+      };
+
+      // 개발자 도구 콘솔에서 데이터가 예쁘게 잘 묶였는지 먼저 확인해 보세요!
+      console.log('🚀 서버로 전송할 신고 데이터:', requestBody);
+
+      // 3. 실제 신고 API 호출 (백엔드 신고 API가 켜져 있다면 주석 풀고 테스트해보세요)
+      // await axios.post('/api/reports', requestBody, {
+      //   headers: { Authorization: `Bearer ${accessToken}` }
+      // });
+
+      // 4. 신고 성공 페이지로 이동 (뒤로 가기 방지를 위해 replace: true)
+      navigate('/report/success', { replace: true });
+    } catch (error) {
+      console.error('신고 처리 중 에러 발생:', error);
+      alert('신고 접수에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
   };
 
   return (
@@ -209,9 +258,7 @@ export default function ReportPage() {
           size="lg"
           variant="primary"
           disabled={!isSubmitEnabled}
-          onClick={() =>
-            alert('디스코드 웹훅 연동 및 API 호출 로직 연결 위치입니다.')
-          }
+          onClick={handleSubmit}
           className="h-[52px]"
         >
           신고하기
